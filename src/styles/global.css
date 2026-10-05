@@ -1,0 +1,397 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Astral Cybernetics — design tokens (see DESIGN.md in the design handoff)
+--------------------------------------------------------------------------- */
+@theme {
+  --color-void: #05070e;
+  --color-surface: #11131b;
+  --color-surface-bright: #373942;
+  --color-surface-container-lowest: #0b0e16;
+  --color-surface-container-low: #191b23;
+  --color-surface-container: #1d1f27;
+  --color-surface-container-high: #272a32;
+  --color-surface-container-highest: #32343d;
+  --color-on-surface: #e1e2ed;
+  --color-on-surface-variant: #b9cacb;
+  --color-outline: #8a9a9b;
+  --color-outline-variant: #3a494b;
+
+  --color-primary: #e0fdff;
+  --color-primary-container: #00f2fe;
+  --color-primary-fixed: #6ff6ff;
+  --color-primary-fixed-dim: #00dce6;
+  --color-on-primary-fixed: #002022;
+
+  --color-secondary: #9bcbff;
+  --color-secondary-container: #3196e6;
+  --color-azure: #4facfe;
+
+  --color-tertiary: #e3ffe2;
+  --color-tertiary-container: #46f986;
+  --color-tertiary-fixed: #64ff92;
+
+  --color-error: #ffb4ab;
+
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* Fluid display sizes; the static sizes mirror the design file. */
+  --text-hero: clamp(2.6rem, 1.35rem + 5.4vw, 5rem);
+  --text-hero--line-height: 1.04;
+  --text-hero--letter-spacing: -0.035em;
+  --text-h2: clamp(2rem, 1.35rem + 2.5vw, 3rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.025em;
+  --text-headline-md: 1.5rem;
+  --text-headline-md--line-height: 2rem;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-sm: 1.25rem;
+  --text-headline-sm--line-height: 1.75rem;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.75rem;
+  --text-body-md: 0.9375rem;
+  --text-body-md--line-height: 1.5rem;
+  --text-body-sm: 0.8125rem;
+  --text-body-sm--line-height: 1.25rem;
+  --text-tele-lg: 0.875rem;
+  --text-tele-lg--line-height: 1.25rem;
+  --text-tele-lg--letter-spacing: 0.04em;
+  --text-tele-md: 0.75rem;
+  --text-tele-md--line-height: 1.125rem;
+  --text-tele-md--letter-spacing: 0.05em;
+  --text-tele-sm: 0.6875rem;
+  --text-tele-sm--line-height: 1rem;
+  --text-tele-sm--letter-spacing: 0.08em;
+  --text-label-caps: 0.6875rem;
+  --text-label-caps--line-height: 1rem;
+  --text-label-caps--letter-spacing: 0.14em;
+  --text-label-caps--font-weight: 600;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-drift: drift 7s ease-in-out infinite;
+  --animate-orb: orb 18s ease-in-out infinite;
+  --animate-packet: packet 3.2s ease-in infinite;
+
+  @keyframes drift {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+  @keyframes orb {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(4%, 18px, 0) scale(1.08); }
+  }
+  @keyframes packet {
+    0% { transform: translateX(0); opacity: 0; }
+    15% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateX(var(--travel, 120px)); opacity: 0; }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-padding-top: 6.5rem;
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--color-surface-container-lowest);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-sans);
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-primary-container);
+    color: var(--color-on-primary-fixed);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-primary-container);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+}
+
+/* ---------------------------------------------------------------------------
+   Surfaces (DESIGN.md › Elevation & Depth)
+--------------------------------------------------------------------------- */
+
+/* Level 1 — suspended glass panel. No backdrop blur: panels sit on flat dark
+   backgrounds, where blur costs GPU time and changes nothing visible. */
+@utility glass {
+  background-color: rgb(16 22 36 / 0.62);
+  border: 1px solid rgb(0 242 254 / 0.12);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 24px 60px -28px rgb(0 0 0 / 0.7);
+}
+
+/* Level 2 — floating HUD module over imagery: real backdrop blur. */
+@utility glass-hud {
+  background-color: rgb(9 14 26 / 0.72);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid rgb(0 242 254 / 0.25);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 18px 50px -12px rgb(0 0 0 / 0.65);
+}
+
+/* Inset glass well (inputs, terminals). */
+@utility glass-well {
+  background-color: rgb(3 5 10 / 0.85);
+  border: 1px solid rgb(0 242 254 / 0.14);
+  box-shadow: inset 0 2px 12px rgb(0 0 0 / 0.55);
+}
+
+/* Level 3 — bioluminescent halo. */
+@utility halo {
+  box-shadow: 0 0 30px rgb(0 242 254 / 0.22), 0 0 70px rgb(79 172 254 / 0.1);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 32px rgb(0 242 254 / 0.45);
+}
+
+/* Laser corner accents: registration marks on the upper-right and lower-left. */
+@utility hud-corners {
+  background-image:
+    linear-gradient(rgb(0 242 254 / 0.6), rgb(0 242 254 / 0.6)),
+    linear-gradient(rgb(0 242 254 / 0.6), rgb(0 242 254 / 0.6)),
+    linear-gradient(rgb(0 242 254 / 0.6), rgb(0 242 254 / 0.6)),
+    linear-gradient(rgb(0 242 254 / 0.6), rgb(0 242 254 / 0.6));
+  background-size: 14px 1px, 1px 14px, 14px 1px, 1px 14px;
+  background-position: right 12px top 12px, right 12px top 12px, left 12px bottom 12px, left 12px bottom 12px;
+  background-repeat: no-repeat;
+}
+
+/* Cosmic substrate: faint star field + nebula from the top. */
+@utility bg-cosmos {
+  background-color: var(--color-surface);
+  background-image:
+    radial-gradient(1px 1px at 23px 41px, rgb(255 255 255 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at 171px 92px, rgb(255 255 255 / 0.3), transparent 60%),
+    radial-gradient(1.5px 1.5px at 260px 210px, rgb(111 246 255 / 0.5), transparent 60%),
+    radial-gradient(1px 1px at 98px 260px, rgb(255 255 255 / 0.25), transparent 60%),
+    radial-gradient(1px 1px at 310px 30px, rgb(155 203 255 / 0.4), transparent 60%),
+    radial-gradient(1px 1px at 52px 170px, rgb(255 255 255 / 0.2), transparent 60%);
+  background-size: 340px 300px;
+}
+
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: var(--text-label-caps);
+  line-height: var(--text-label-caps--line-height);
+  letter-spacing: var(--text-label-caps--letter-spacing);
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: rgb(39 42 50 / 0.85);
+  box-shadow: inset 0 0 0 1px rgb(0 242 254 / 0.18);
+}
+
+/* ---------------------------------------------------------------------------
+   Components
+--------------------------------------------------------------------------- */
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0 1.75rem;
+    border-radius: 0.875rem;
+    background-color: var(--color-primary-container);
+    color: var(--color-on-primary-fixed);
+    font-family: var(--font-mono);
+    font-size: var(--text-tele-lg);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 0 34px rgb(0 242 254 / 0.42);
+    transition: box-shadow 0.3s, transform 0.3s var(--ease-out-expo), background-color 0.3s;
+  }
+  .btn-primary:hover { box-shadow: 0 0 56px rgb(0 242 254 / 0.68); transform: translateY(-1px); background-color: var(--color-primary-fixed); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0 1.5rem;
+    border-radius: 0.875rem;
+    border: 1px solid rgb(79 172 254 / 0.35);
+    background-color: rgb(39 42 50 / 0.55);
+    color: var(--color-on-surface);
+    font-family: var(--font-mono);
+    font-size: var(--text-tele-md);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  }
+  .btn-ghost:hover { background-color: rgb(0 242 254 / 0.08); border-color: rgb(0 242 254 / 0.5); color: var(--color-primary); }
+
+  .led {
+    position: relative;
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: currentColor;
+    box-shadow: 0 0 10px currentColor;
+    flex: none;
+  }
+
+  /* Prose for long-form pages */
+  .prose-elora > * + * { margin-top: 1rem; }
+  .prose-elora > h2 {
+    margin-top: 3.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 1.25rem + 1.3vw, 2.1rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+  .prose-elora > h3 {
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+  .prose-elora > p, .prose-elora > ul > li { color: var(--color-on-surface-variant); font-size: 1.0625rem; line-height: 1.8; }
+  .prose-elora strong { color: var(--color-on-surface); font-weight: 600; }
+  .prose-elora > ul { padding-left: 1.25rem; list-style: none; }
+  .prose-elora > ul > li { position: relative; }
+  .prose-elora > ul > li + li { margin-top: 0.5rem; }
+  .prose-elora > ul > li::before {
+    content: "";
+    position: absolute;
+    left: -1.1rem;
+    top: 0.75em;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 9999px;
+    background: var(--color-primary-container);
+    box-shadow: 0 0 8px var(--color-primary-container);
+  }
+  .prose-elora a { color: var(--color-primary-container); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgb(0 242 254 / 0.4); }
+  .prose-elora a:hover { text-decoration-color: currentColor; }
+  .prose-elora code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    padding: 0.1em 0.4em;
+    border-radius: 0.375rem;
+    background: var(--color-surface-container-high);
+    color: var(--color-primary);
+  }
+}
+
+/* Cursor-following spotlight + lit edge on glass cards (fine pointers only). */
+[data-spotlight] { position: relative; isolation: isolate; }
+[data-spotlight]::before,
+[data-spotlight]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+[data-spotlight]::before {
+  z-index: -1;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgb(0 242 254 / 0.09), transparent 65%);
+}
+[data-spotlight]::after {
+  padding: 1px;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgb(0 242 254 / 0.6), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-spotlight]:hover::before,
+  [data-spotlight]:hover::after { opacity: 1; }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion — progressive enhancement. Everything is visible without JavaScript
+   (and to crawlers); `js-anim` is only set when motion is allowed.
+--------------------------------------------------------------------------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.rise { animation: rise 0.95s var(--ease-out-expo) both; animation-delay: var(--d, 0s); }
+
+@keyframes blink { 50% { opacity: 0; } }
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.17em;
+  background: var(--color-primary-container);
+  box-shadow: 0 0 8px var(--color-primary-container);
+  animation: blink 1s steps(1) infinite;
+}
+
+.js-anim [data-reveal] { opacity: 0; transform: translateY(28px); }
+.js-anim [data-split] { opacity: 0; }
+[data-bar] { transform-origin: left center; }
+.js-anim [data-bar] { transform: scaleX(0); }
+
+/* Cognitive loop: stages light up as the reader scrolls through them. */
+[data-stage] { transition: opacity 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background-color 0.5s ease; }
+[data-stage] .stage-bar { transform-origin: left center; transition: transform 0.6s var(--ease-out-expo); }
+/* Unlit stages stay readable (WCAG AA): dimmed and desaturated, not faded out. */
+.js-anim [data-stage]:not(.is-lit) { opacity: 0.72; filter: saturate(0.25); }
+.js-anim [data-stage]:not(.is-lit) .stage-bar { transform: scaleX(0); }
+[data-stage].is-lit {
+  border-color: rgb(0 242 254 / 0.4);
+  box-shadow: 0 0 0 1px rgb(0 242 254 / 0.12), 0 0 32px rgb(0 242 254 / 0.12);
+}
+[data-stage-rail] { --p: 1; }
+.js-anim [data-stage-rail] { --p: 0; }
+[data-stage-rail] > span { transform: scaleY(var(--p)); transform-origin: top center; }
+@media (min-width: 768px) {
+  [data-stage-rail] > span { transform: scaleX(var(--p)); transform-origin: left center; }
+}
+
+/* Cross-document page transitions: zero JavaScript. */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.32s; }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

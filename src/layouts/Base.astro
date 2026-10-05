@@ -1,0 +1,189 @@
+---
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import displayFont from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import bodyFont from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { FEATURES, SITE } from '../data/site';
+
+type JsonLd = Record<string, unknown>;
+
+interface Props {
+  /** Full <title>. Keep it under ~60 characters. */
+  title: string;
+  /** Meta description. Keep it under ~160 characters. */
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  /** schema.org type for this page's WebPage node. */
+  pageType?: 'WebPage' | 'AboutPage' | 'FAQPage' | 'CollectionPage';
+  /** Breadcrumb trail after "Home", e.g. [{ name: 'FAQ', path: '/faq/' }]. */
+  breadcrumbs?: { name: string; path: string }[];
+  /** Extra JSON-LD nodes merged into this page's @graph. */
+  schema?: JsonLd[];
+  /** Extra properties for this page's WebPage node (e.g. FAQPage mainEntity). */
+  pageProps?: JsonLd;
+}
+
+const {
+  title,
+  description,
+  image = SITE.ogImage,
+  imageAlt = SITE.ogImageAlt,
+  ogType = 'website',
+  noindex = false,
+  pageType = 'WebPage',
+  breadcrumbs = [],
+  schema = [],
+  pageProps = {},
+} = Astro.props;
+
+const site = Astro.site ?? new URL(SITE.url);
+const canonical = new URL(Astro.url.pathname, site).href;
+const imageUrl = new URL(image, site).href;
+const id = (fragment: string) => `${SITE.url}/#${fragment}`;
+const modified = new Date().toISOString();
+
+const graph: JsonLd[] = [
+  {
+    '@type': 'Organization',
+    '@id': id('organization'),
+    name: SITE.brand,
+    url: `${SITE.url}/`,
+    logo: { '@type': 'ImageObject', url: new URL(SITE.logo, site).href, width: 512, height: 512 },
+  },
+  {
+    '@type': 'WebSite',
+    '@id': id('website'),
+    url: `${SITE.url}/`,
+    name: SITE.name,
+    alternateName: SITE.brand,
+    description: SITE.description,
+    inLanguage: 'en',
+    publisher: { '@id': id('organization') },
+  },
+  {
+    '@type': 'SoftwareApplication',
+    '@id': id('software'),
+    name: SITE.name,
+    alternateName: SITE.brand,
+    url: `${SITE.url}/`,
+    description: SITE.description,
+    applicationCategory: 'UtilitiesApplication',
+    applicationSubCategory: 'AI assistant',
+    operatingSystem: 'Windows 10, Windows 11',
+    softwareRequirements: 'Ollama',
+    memoryRequirements: '16 GB RAM',
+    processorRequirements: 'Graphics card with 4 GB of memory (GTX 1650 class)',
+    inLanguage: ['en', 'ur'],
+    image: new URL(SITE.ogImage, site).href,
+    screenshot: new URL(SITE.screenshot, site).href,
+    featureList: [...FEATURES],
+    publisher: { '@id': id('organization') },
+  },
+  {
+    '@type': pageType,
+    '@id': `${canonical}#webpage`,
+    url: canonical,
+    name: title,
+    description,
+    inLanguage: 'en',
+    isPartOf: { '@id': id('website') },
+    about: { '@id': id('software') },
+    primaryImageOfPage: { '@type': 'ImageObject', url: imageUrl, width: 1200, height: 630 },
+    dateModified: modified,
+    ...(breadcrumbs.length ? { breadcrumb: { '@id': `${canonical}#breadcrumb` } } : {}),
+    ...pageProps,
+  },
+  ...(breadcrumbs.length
+    ? [
+        {
+          '@type': 'BreadcrumbList',
+          '@id': `${canonical}#breadcrumb`,
+          itemListElement: [{ name: 'Home', path: '/' }, ...breadcrumbs].map((crumb, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: crumb.name,
+            item: new URL(crumb.path, site).href,
+          })),
+        },
+      ]
+    : []),
+  ...schema,
+];
+
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Turn on entrance animations only when motion is welcome; content never depends on them. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        if (window.matchMedia && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+          d.classList.add('js-anim');
+          setTimeout(function () { if (!d.dataset.anim) d.classList.remove('js-anim'); }, 3500);
+        }
+      })();
+    </script>
+
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Open Graph / social previews -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.brand} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+
+    <script type="application/ld+json" set:html={jsonLd} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main" class="sr-only z-[60] rounded-lg bg-primary-container px-4 py-2 font-mono text-tele-md font-bold text-on-primary-fixed focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

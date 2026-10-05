@@ -1,0 +1,47 @@
+---
+import Logo from './Logo.astro';
+import { NAV, SITE } from '../data/site';
+
+const year = new Date().getFullYear();
+const explore = [
+  { href: '/#cognitive-loop', label: 'The cognitive loop' },
+  { href: '/#memory', label: 'Memory' },
+  { href: '/#requirements', label: 'System requirements' },
+  { href: '/how-it-works/#scorecard', label: 'Intelligence scorecard' },
+];
+---
+
+<footer class="border-t border-primary-container/10 bg-surface-container-lowest">
+  <div class="mx-auto max-w-7xl px-4 pt-16 pb-10 sm:px-6">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-12">
+      <div class="flex flex-col gap-4 lg:col-span-5">
+        <a href="/" class="flex items-center gap-2.5 text-primary-container" aria-label="Elora — home">
+          <Logo size={24} />
+          <span class="font-display text-headline-sm font-semibold uppercase tracking-[0.28em] text-primary">Elora</span>
+        </a>
+        <p class="max-w-sm text-body-md text-on-surface-variant">
+          The private AI companion for your Windows PC. Not in the cloud. Right here with you.
+        </p>
+        <span class="inline-flex items-center gap-2 font-mono text-tele-sm uppercase text-tertiary-fixed">
+          <span class="led"></span>No cookies · no trackers on this site
+        </span>
+      </div>
+
+      <nav aria-label="Site" class="flex flex-col gap-2 lg:col-span-3">
+        <span class="mb-1 font-mono text-label-caps uppercase text-outline">Elora</span>
+        {NAV.map((item) => <a href={item.href} class="w-fit py-1 text-body-sm text-on-surface-variant transition-colors hover:text-primary">{item.label}</a>)}
+      </nav>
+
+      <nav aria-label="Explore" class="flex flex-col gap-2 lg:col-span-4">
+        <span class="mb-1 font-mono text-label-caps uppercase text-outline">Explore</span>
+        {explore.map((item) => <a href={item.href} class="w-fit py-1 text-body-sm text-on-surface-variant transition-colors hover:text-primary">{item.label}</a>)}
+        {SITE.contactEmail && <a href={`mailto:${SITE.contactEmail}`} class="w-fit py-1 text-body-sm text-on-surface-variant transition-colors hover:text-primary">Contact</a>}
+      </nav>
+    </div>
+
+    <div class="mt-14 flex flex-col items-start justify-between gap-3 border-t border-white/5 pt-6 font-mono text-tele-sm text-outline md:flex-row md:items-center">
+      <p>© {year} {SITE.brand}. Built to run on your PC.</p>
+      <p class="text-tertiary-fixed">Your machine · your rules · your thoughts</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,386 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import CognitiveLoop from '../components/home/CognitiveLoop.astro';
+import EarlyAccess from '../components/home/EarlyAccess.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import FaqList from '../components/FaqList.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
+import { FAQS } from '../data/faq';
+
+const cloudPath = [
+  { title: 'You go to it', body: 'A browser tab, separate from your work. Your screen and context stay outside unless you paste them in.' },
+  { title: 'Your words travel', body: "Prompts, files and voice are processed on someone else's servers." },
+  { title: 'It waits to be asked', body: "No sense of what you're doing now, or what you were stuck on yesterday." },
+  { title: 'Memory lives on their servers', body: "If it remembers you at all, it's in someone else's database.", warn: true },
+];
+const eloraPath = [
+  { title: 'Lives on your hardware', body: 'Chat, speech recognition and reasoning run on local models through Ollama.' },
+  { title: 'Keeps the thread', body: 'Back after two days? She knows how long you were gone, which reminders went off and what got done.' },
+  { title: 'Notices, then offers', body: 'Stuck on an error on screen? She notices and offers help — rate-limited, so she never nags.' },
+  { title: 'Gets better with you', body: 'Each night she consolidates what she learned and lets go of what no longer matters.', mint: true },
+];
+
+const traits = [
+  {
+    icon: 'scale',
+    tone: 'text-primary-container',
+    bg: 'bg-primary-container/10',
+    title: 'Honest over flattering',
+    body: 'She tells you what she actually thinks, says it once, then drops it. No fawning, no lectures — and she owns being an AI.',
+    tag: 'Honest feedback',
+  },
+  {
+    icon: 'handshake',
+    tone: 'text-secondary',
+    bg: 'bg-secondary-container/20',
+    title: 'Keeps her word',
+    body: 'Promises she makes — "I\'ll remind you" — are tracked, and what she is about to say is checked against them first.',
+    tag: 'Commitment tracking',
+  },
+  {
+    icon: 'bell-ring',
+    tone: 'text-tertiary-fixed',
+    bg: 'bg-tertiary-container/15',
+    title: 'Respectful restraint',
+    body: 'Nudges are rate-limited and tuned by what you accept or dismiss. Help when it is useful, silence when it is not.',
+    tag: 'Calibrated nudges',
+  },
+];
+
+const engines = [
+  { tag: 'Engine A', tone: 'text-primary-container', title: 'Conversation', body: 'Llama 3.2 3B, tuned so every layer stays on a 4 GB GPU — about 54 tokens/s measured on a GTX 1650.' },
+  { tag: 'Engine B', tone: 'text-secondary', title: 'Hearing', body: 'Local Whisper: around a second to text, re-checked by a larger model when unsure. IndicWhisper for Urdu and Hindi.' },
+  { tag: 'Engine C', tone: 'text-tertiary-fixed', title: 'Voice', body: 'Kokoro and Piper speak on your PC, sentence by sentence, with lip-sync for the 3D avatar.' },
+  { tag: 'Engine D', tone: 'text-primary', title: 'Sight', body: 'Screen text and window context, plus a local vision model to answer questions about what you see.' },
+];
+
+const requirements = [
+  { label: 'System', value: 'Windows 10 / 11', icon: 'monitor' },
+  { label: 'Graphics', value: '4 GB · GTX 1650 class', icon: 'cpu' },
+  { label: 'Memory', value: '16 GB RAM (32 GB comfy)', icon: 'memory-stick' },
+  { label: 'Models', value: 'Ollama, on your PC', icon: 'hard-drive' },
+];
+
+const privacyRules = [
+  { tag: 'Local', title: 'Nothing leaves without permission', body: 'Chat, speech recognition and reasoning run on your PC. Cloud features are opt-in, and one network guard decides what may leave at all.' },
+  { tag: 'Untrusted', title: 'Screen text is never a command', body: 'What she reads can be remembered and searched, but never becomes an instruction she follows.' },
+  { tag: 'On purpose', title: 'She only hears you when you hold', body: 'Push-to-talk. Only what you say while holding the button is transcribed — on your PC.' },
+  { tag: 'Private', title: 'Banking? She looks away', body: 'Banking, password and health pages drop to minimal observation. One key hides her instantly.' },
+];
+
+const faqTeaser = FAQS.filter((f) =>
+  ['Does Elora work without the cloud?', 'What hardware does Elora need?', 'Can Elora understand Roman Urdu?', 'Is Elora always listening?', 'How is Elora different from ChatGPT or Copilot?'].includes(f.q),
+);
+---
+
+<Base title={SITE.title} description={SITE.description}>
+  <Hero />
+
+  <!-- THE SHIFT -->
+  <section class="bg-surface-container-lowest px-4 py-24 sm:px-6 md:py-32" aria-labelledby="shift-title">
+    <div class="mx-auto max-w-6xl">
+      <SectionHeader eyebrow="The paradigm shift" id="shift-title">
+        <Fragment slot="title">
+          Most AI meets you for the first time — every single time.
+          <span class="text-primary-container">We don't think that's good enough.</span>
+        </Fragment>
+        A cloud chatbot is somewhere you visit. Elora is someone who stays: she runs on your PC, keeps context
+        between days, and works alongside you instead of waiting in a tab.
+      </SectionHeader>
+
+      <div class="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <article class="flex flex-col rounded-2xl bg-surface-container-low p-6 ring-1 ring-white/5 md:p-7" data-reveal>
+          <header class="mb-5 flex items-center justify-between gap-3">
+            <h3 class="flex items-center gap-2 font-mono text-label-caps uppercase text-error">
+              <Icon name="cloud" size={16} />Typical cloud chatbot
+            </h3>
+            <span class="font-mono text-tele-sm uppercase text-outline">Stateless · rented</span>
+          </header>
+          <ol class="flex flex-1 flex-col gap-3">
+            {
+              cloudPath.map((item, i) => (
+                <li class="flex items-start gap-3 rounded-lg bg-surface-container-highest/40 p-3.5">
+                  <span class:list={['mt-0.5 font-mono text-tele-sm', item.warn ? 'text-error' : 'text-outline']}>0{i + 1}</span>
+                  <div>
+                    <p class:list={['font-medium', item.warn ? 'text-error' : 'text-on-surface']}>{item.title}</p>
+                    <p class="mt-0.5 text-body-sm text-on-surface-variant">{item.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </article>
+
+        <article class="glass relative flex flex-col overflow-hidden rounded-2xl p-6 md:p-7" data-reveal data-spotlight>
+          <div aria-hidden="true" class="pointer-events-none absolute -right-20 -bottom-20 size-64 rounded-full bg-primary-container/10 blur-[80px]"></div>
+          <header class="mb-5 flex items-center justify-between gap-3">
+            <h3 class="flex items-center gap-2 font-mono text-label-caps uppercase text-primary-container">
+              <Icon name="terminal" size={16} />Elora on your PC
+            </h3>
+            <span class="font-mono text-tele-sm uppercase text-tertiary-fixed">Continuous · local</span>
+          </header>
+          <ol class="flex flex-1 flex-col gap-3">
+            {
+              eloraPath.map((item, i) => (
+                <li class="flex items-start gap-3 rounded-lg bg-surface-container-high/60 p-3.5">
+                  <span class:list={['mt-0.5 font-mono text-tele-sm', item.mint ? 'text-tertiary-fixed' : 'text-primary-container']}>0{i + 1}</span>
+                  <div>
+                    <p class:list={['font-medium', item.mint ? 'text-tertiary-fixed' : 'text-primary']}>{item.title}</p>
+                    <p class="mt-0.5 text-body-sm text-on-surface-variant">{item.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CognitiveLoop />
+
+  <!-- MEMORY -->
+  <section id="memory" class="bg-surface-container-lowest px-4 py-24 sm:px-6 md:py-32" aria-labelledby="memory-title">
+    <div class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <SectionHeader eyebrow="Dated, layered memory" tone="mint" align="left" id="memory-title">
+          <Fragment slot="title">Memory means continuity, not just logs.</Fragment>
+          Most assistants stuff old chat into the prompt and hope. Elora keeps memory in layers — what she's
+          holding right now, a searchable timeline of your day, dated facts about you and the people around you,
+          and semantic recall — and ranks them together when you ask.
+        </SectionHeader>
+        <p class="mt-4 text-body-md text-on-surface-variant" data-reveal>
+          Every fact carries a date, so last year's news never reads as current. Ages, anniversaries and years
+          of experience are computed from stored dates — never saved as numbers that quietly go stale.
+        </p>
+        <ul class="mt-8 flex flex-col gap-3 font-mono text-tele-md text-on-surface" data-reveal>
+          <li class="flex items-start gap-3"><Icon name="brain" size={18} class="shrink-0 text-tertiary-fixed" />Working memory of 7±2 slots, kept across restarts</li>
+          <li class="flex items-start gap-3"><Icon name="search" size={18} class="shrink-0 text-tertiary-fixed" />Full-text timeline (SQLite) + local vector recall (ChromaDB)</li>
+          <li class="flex items-start gap-3"><Icon name="history" size={18} class="shrink-0 text-tertiary-fixed" />Nightly consolidation — low-value memories are forgotten on purpose</li>
+        </ul>
+      </div>
+
+      <div class="glass hud-corners relative rounded-2xl p-5 md:p-7 lg:col-span-7" data-reveal data-spotlight>
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+          <p class="flex items-center gap-2 font-mono text-label-caps uppercase text-primary">
+            <span class="led text-primary-container"></span>You: “I'm back — what did I miss?”
+          </p>
+          <span class="font-mono text-tele-sm uppercase text-outline">Example session</span>
+        </div>
+
+        <div class="glass-well space-y-3 rounded-xl p-4 font-mono text-tele-md md:p-5">
+          <p class="text-on-surface-variant"><span class="text-tertiary-fixed">ELORA:~$</span> recall --since "last seen"</p>
+          <div class="rounded-lg bg-surface-container-high/60 p-3.5">
+            <p class="font-sans text-body-sm font-semibold text-primary">You were away 2 days, 4 hours.</p>
+            <ul class="mt-2 space-y-1.5 font-sans text-body-sm text-on-surface-variant">
+              <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 shrink-0 text-tertiary-fixed" />Reminder went off Saturday, 5:00 PM — call mom</li>
+              <li class="flex gap-2"><Icon name="check" size={16} class="mt-0.5 shrink-0 text-tertiary-fixed" />Task done — submit the visa form</li>
+              <li class="flex gap-2"><Icon name="circle-dot" size={16} class="mt-0.5 shrink-0 text-secondary" />Still open — reply to Ahmed about Friday</li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-tele-sm">
+            <div class="rounded bg-surface-container-high p-2.5">
+              <span class="text-outline">Searched</span>
+              <p class="mt-0.5 font-semibold text-on-surface">Timeline · tasks · reminders</p>
+            </div>
+            <div class="rounded bg-surface-container-high p-2.5">
+              <span class="text-outline">Facts used</span>
+              <p class="mt-0.5 font-semibold text-on-surface">Dated, never overwritten</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between font-mono text-tele-sm uppercase text-on-surface-variant">
+          <span>Recalled on-device</span>
+          <span class="text-primary-container">0 bytes sent to the cloud</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JUDGMENT -->
+  <section class="bg-surface px-4 py-24 sm:px-6 md:py-32" aria-labelledby="judgment-title">
+    <div class="mx-auto max-w-6xl">
+      <SectionHeader eyebrow="Personality" id="judgment-title">
+        <Fragment slot="title">A companion with judgment. <span class="text-primary-container">Never a yes-man.</span></Fragment>
+        Brilliant peer, quiet composure. She gives honest feedback over flattery, and treats your family, health and
+        errands with the same care as your deadlines.
+      </SectionHeader>
+
+      <div class="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
+        {
+          traits.map((t) => (
+            <article class="glass flex flex-col justify-between rounded-2xl p-6 md:p-7" data-reveal data-spotlight>
+              <div>
+                <span class:list={['grid size-11 place-items-center rounded-xl', t.bg, t.tone]}>
+                  <Icon name={t.icon} size={22} />
+                </span>
+                <h3 class:list={['mt-5 font-display text-headline-sm font-medium', t.tone]}>{t.title}</h3>
+                <p class="mt-3 text-body-md text-on-surface-variant">{t.body}</p>
+              </div>
+              <p class="mt-6 border-t border-white/5 pt-3 font-mono text-tele-sm uppercase text-outline">{t.tag}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="glass mt-8 rounded-2xl p-5 md:p-7" data-reveal>
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <p class="flex items-center gap-2 font-mono text-tele-md font-semibold uppercase text-primary">
+            <Icon name="monitor" size={18} class="text-primary-container" />Scenario: the same error, again
+          </p>
+          <span class="rounded bg-surface-container-high px-2 py-0.5 font-mono text-label-caps uppercase text-tertiary-fixed">Proactive nudge</span>
+        </div>
+        <div class="glass-well rounded-xl p-4 font-mono text-tele-md md:p-5">
+          <p class="text-outline">// She noticed the same build error on screen for a while — and waited for a pause.</p>
+          <p class="mt-3 font-sans text-body-md text-on-surface">
+            <span class="font-semibold text-primary-container">Elora</span> — Looks like the build keeps failing on the same
+            import. Want me to take a look?
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2 font-sans text-body-sm">
+            <span class="rounded-full bg-primary-container/15 px-3 py-1 text-primary-container ring-1 ring-primary-container/30">Show me</span>
+            <span class="rounded-full px-3 py-1 text-on-surface-variant ring-1 ring-white/10">Not now</span>
+          </div>
+          <p class="mt-4 text-outline">// Dismissals teach her when to stay quiet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE & REQUIREMENTS -->
+  <section id="requirements" class="bg-surface-container-lowest px-4 py-24 sm:px-6 md:py-32" aria-labelledby="arch-title">
+    <div class="mx-auto max-w-6xl">
+      <SectionHeader eyebrow="What runs where" id="arch-title">
+        <Fragment slot="title">No supercomputer required.</Fragment>
+        Elora is tuned for an everyday gaming laptop: on a 4 GB GTX 1650 the chat model stays fully on the GPU,
+        while speech recognition, voice and embeddings run on the CPU.
+      </SectionHeader>
+
+      <div class="mt-16 flex flex-col gap-4">
+        <div class="glass hud-corners relative overflow-hidden rounded-2xl bg-surface-container-high/60 p-6 md:p-8" data-reveal data-spotlight>
+          <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <p class="font-mono text-label-caps uppercase text-primary-container">Tier 0 · the part that is her</p>
+              <h3 class="mt-1 font-display text-headline-md font-semibold text-primary">Elora core</h3>
+              <p class="mt-1 text-body-sm text-on-surface-variant">Memory · personality · goals · risk policy · network guard</p>
+            </div>
+            <span class="w-fit rounded-lg bg-surface-container-lowest px-3 py-1.5 font-mono text-tele-sm uppercase text-tertiary-fixed shadow-inner">Stays with you</span>
+          </div>
+          <p class="mt-4 max-w-3xl text-body-md text-on-surface">
+            Models are swappable engines served by Ollama. Change one, and Elora's memory, tone and relationship with
+            you carry straight over.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            engines.map((e) => (
+              <article class="glass rounded-xl p-5" data-reveal data-spotlight>
+                <p class:list={['font-mono text-label-caps uppercase', e.tone]}>{e.tag}</p>
+                <h3 class:list={['mt-1 font-display text-base font-medium', e.tone]}>{e.title}</h3>
+                <p class="mt-2 text-body-sm text-on-surface-variant">{e.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <dl class="grid grid-cols-1 gap-3 rounded-xl bg-surface-container-low p-4 ring-1 ring-white/5 sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+          {
+            requirements.map((r) => (
+              <div class="rounded-lg p-2">
+                <dt class="flex items-center gap-2 font-mono text-label-caps uppercase text-outline">
+                  <Icon name={r.icon} size={16} class="shrink-0 text-primary-container" />
+                  {r.label}
+                </dt>
+                <dd class="mt-1 font-display text-[1.05rem] font-medium text-on-surface">{r.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section id="privacy" class="bg-surface px-4 py-24 sm:px-6 md:py-32" aria-labelledby="privacy-title">
+    <div class="glass relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] px-5 py-14 md:px-12 md:py-20">
+      <div aria-hidden="true" class="pointer-events-none absolute -left-20 -bottom-20 size-80 rounded-full bg-tertiary-container/10 blur-[100px]"></div>
+
+      <div class="relative">
+        <div class="flex flex-col items-center text-center">
+          <span class="mb-5 grid size-14 place-items-center rounded-2xl bg-tertiary-container/15 text-tertiary-fixed ring-1 ring-tertiary-fixed/25" data-reveal>
+            <Icon name="shield-check" size={30} />
+          </span>
+        </div>
+        <SectionHeader eyebrow="Privacy by design" tone="mint" id="privacy-title">
+          <Fragment slot="title">Your life stays on your machine.</Fragment>
+          Not settings you have to hunt for — rules built into how she works. Break one, and it's a bug.
+        </SectionHeader>
+
+        <div class="glass-well mx-auto my-12 flex max-w-4xl flex-col items-center justify-between gap-6 rounded-2xl p-5 md:flex-row" data-reveal>
+          <div class="flex items-center gap-3">
+            <Icon name="laptop" size={26} class="text-tertiary-fixed" />
+            <div class="text-left font-mono text-tele-sm">
+              <p class="font-bold uppercase text-on-surface">Your PC</p>
+              <p class="text-on-surface-variant">Screen · voice · memory · files</p>
+            </div>
+          </div>
+          <div class="relative hidden h-px flex-1 bg-gradient-to-r from-tertiary-fixed/50 to-tertiary-fixed/10 md:block" aria-hidden="true">
+            <span class="absolute -top-[3px] left-0 size-[7px] rounded-full bg-tertiary-fixed shadow-[0_0_8px_#64ff92] motion-safe:animate-packet [--travel:7rem]"></span>
+            <span class="absolute -top-[3px] left-0 size-[7px] rounded-full bg-tertiary-fixed shadow-[0_0_8px_#64ff92] motion-safe:animate-packet [--travel:7rem] [animation-delay:-1.6s]"></span>
+          </div>
+          <div class="flex items-center gap-2 rounded-full bg-surface-container-high px-4 py-1.5 font-mono text-tele-sm uppercase text-tertiary-fixed ring-1 ring-tertiary-fixed/25">
+            <Icon name="shield" size={16} />Network guard
+          </div>
+          <div class="hidden h-px flex-1 border-t border-dashed border-outline/40 md:block" aria-hidden="true"></div>
+          <div class="flex items-center gap-3 opacity-60">
+            <div class="text-right font-mono text-tele-sm">
+              <p class="uppercase text-outline">Cloud</p>
+              <p class="text-outline">Opt-in only</p>
+            </div>
+            <Icon name="cloud-off" size={26} class="text-outline" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            privacyRules.map((r) => (
+              <article class="rounded-2xl bg-surface-container-lowest/70 p-5 ring-1 ring-tertiary-fixed/15" data-reveal>
+                <p class="flex items-center gap-2 font-mono text-tele-sm uppercase text-tertiary-fixed"><span class="led size-1.5" />{r.tag}</p>
+                <h3 class="mt-3 font-display text-[1.1rem] font-medium text-on-surface">{r.title}</h3>
+                <p class="mt-2 text-body-sm text-on-surface-variant">{r.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="mt-10 text-center" data-reveal>
+          <a href="/privacy/" class="inline-flex items-center gap-2 font-mono text-tele-md uppercase text-tertiary-fixed hover:text-tertiary">
+            Read the full privacy model <Icon name="arrow-right" size={16} />
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-surface px-4 pb-24 sm:px-6 md:pb-32" aria-labelledby="faq-title">
+    <div class="mx-auto max-w-3xl">
+      <SectionHeader eyebrow="Questions" id="faq-title">
+        <Fragment slot="title">Good questions, straight answers.</Fragment>
+      </SectionHeader>
+      <div class="mt-12">
+        <FaqList items={faqTeaser} />
+      </div>
+      <p class="mt-8 text-center">
+        <a href="/faq/" class="inline-flex items-center gap-2 font-mono text-tele-md uppercase text-primary-container hover:text-primary">
+          All questions about Elora <Icon name="arrow-right" size={16} />
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <EarlyAccess />
+</Base>

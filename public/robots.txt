@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eloraos.com/sitemap-index.xml

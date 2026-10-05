@@ -1,0 +1,157 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import workspace from '../../assets/elora-workspace.jpg';
+
+const pillars = [
+  { label: 'Local-first', tone: 'text-on-surface-variant' },
+  { label: 'Remembers what matters', tone: 'text-primary' },
+  { label: 'English + Roman Urdu', tone: 'text-on-surface-variant' },
+  { label: 'Private by design', tone: 'text-tertiary-fixed' },
+  { label: 'Built to act', tone: 'text-secondary' },
+];
+const reply = "Done. I'll remind you today at 5:00 PM: call mom.";
+---
+
+<section class="bg-cosmos relative overflow-hidden px-4 pt-32 pb-20 sm:px-6 md:pt-40" aria-labelledby="hero-title">
+  <!-- Ambient glow -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+    <div class="absolute -top-40 left-1/2 h-[30rem] w-[46rem] max-w-[140vw] -translate-x-1/2 rounded-full bg-primary-container/12 blur-[130px] motion-safe:animate-orb"></div>
+    <div class="absolute top-[28rem] left-[8%] h-80 w-[26rem] rounded-full bg-secondary-container/12 blur-[110px] motion-safe:animate-orb [animation-delay:-6s]"></div>
+    <div class="absolute bottom-24 right-[6%] h-72 w-96 rounded-full bg-tertiary-container/[0.06] blur-[120px]"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto flex max-w-5xl flex-col items-center text-center">
+    <h1 id="hero-title" class="flex flex-col items-center">
+      <span class="rise eyebrow max-w-full justify-center text-center text-primary" style="--d: 0s">
+        <span class="led text-primary-container motion-safe:animate-pulse"></span>
+        Elora · the private AI companion for your Windows PC
+      </span>
+      <span class="rise mt-7 font-display text-hero font-bold text-primary drop-shadow-[0_4px_30px_rgb(0_242_254/0.25)]" style="--d: .08s">
+        Not in the cloud.<br />
+        <span class="bg-gradient-to-r from-primary via-primary-fixed to-primary-container bg-clip-text text-transparent">Right here with you.</span>
+      </span>
+    </h1>
+
+    <p class="rise mt-7 max-w-2xl text-body-lg text-on-surface-variant md:text-[1.25rem] md:leading-8" style="--d: .18s">
+      Elora is an AI companion that lives on your computer. She sees what's on your screen, hears you when you
+      ask, remembers what matters and gets things done — while your conversations, voice and memories stay on
+      your own hardware.
+    </p>
+
+    <div class="rise mt-9 flex flex-wrap items-center justify-center gap-4" style="--d: .26s">
+      <a href="#early-access" class="btn-primary group">
+        <Icon name="sparkles" size={18} />
+        Get early access
+        <span class="size-1.5 rounded-full bg-on-primary-fixed transition-transform group-hover:scale-150"></span>
+      </a>
+      <a href="#cognitive-loop" class="btn-ghost">
+        <Icon name="brain" size={18} />
+        See how she thinks
+        <span class="text-primary-container" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <ul class="rise mt-12 flex flex-wrap items-center justify-center gap-2" style="--d: .34s" aria-label="At a glance">
+      {
+        pillars.map((p) => (
+          <li class:list={['rounded-md bg-surface-container-low/90 px-2.5 py-1 font-mono text-tele-sm uppercase ring-1 ring-white/5', p.tone]}>
+            [{p.label}]
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!-- Workspace showcase -->
+  <div class="relative z-10 mx-auto mt-16 w-full max-w-6xl [perspective:1800px] md:mt-20">
+    <figure data-hud-frame class="halo relative rounded-2xl bg-surface-container-lowest p-2 ring-1 ring-primary-container/20 will-change-transform md:p-3">
+      <div class="mb-2 flex items-center justify-between gap-3 rounded-t-xl bg-surface-container-low px-3 py-2 md:px-4">
+        <div class="flex min-w-0 items-center gap-2">
+          <span class="size-2.5 shrink-0 rounded-full bg-error/70"></span>
+          <span class="size-2.5 shrink-0 rounded-full bg-secondary-container/70"></span>
+          <span class="size-2.5 shrink-0 rounded-full bg-tertiary-container/70"></span>
+          <span class="ml-2 truncate font-mono text-tele-sm font-semibold text-on-surface-variant">ELORA.SYS · COMPANION WORKSPACE</span>
+        </div>
+        <div class="flex shrink-0 items-center gap-4 font-mono text-tele-sm">
+          <span class="flex items-center gap-1.5 text-tertiary-fixed"><span class="led size-1.5"></span>ON-DEVICE</span>
+          <span class="hidden text-outline sm:inline">127.0.0.1:11434</span>
+        </div>
+      </div>
+
+      <div class="relative aspect-video overflow-hidden rounded-xl bg-surface-container-low">
+        <Picture
+          src={workspace}
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280, 1600, 1920]}
+          sizes="(min-width: 1180px) 1128px, 96vw"
+          alt="Elora's companion workspace on Windows: a holographic Elora floats above a glowing platform in a night-sky city, with an “Ask ELORA anything” bar at the bottom."
+          loading="eager"
+          fetchpriority="high"
+          class="h-full w-full object-cover"
+        />
+
+        <!-- HUD overlays (desktop) -->
+        <div class="pointer-events-none absolute inset-0 hidden p-5 md:block lg:p-7" aria-hidden="true">
+          <div class="flex items-start justify-between pt-[7%]">
+            <div class="glass-hud hud-corners max-w-[17rem] rounded-xl p-4 text-left motion-safe:animate-drift">
+              <div class="flex items-center gap-2">
+                <Icon name="database" size={16} class="text-primary-container" />
+                <span class="font-mono text-label-caps uppercase text-primary">Memory</span>
+              </div>
+              <p class="mt-2 font-display text-[1.05rem] font-medium text-on-surface">Every fact dated.</p>
+              <p class="mt-1 text-body-sm text-on-surface-variant">Nothing silently overwritten. Ages and anniversaries are computed fresh.</p>
+              <p class="mt-2.5 flex items-center gap-2 font-mono text-tele-sm text-tertiary-fixed"><span class="led size-1.5"></span>Stored on this PC</p>
+            </div>
+
+            <div class="glass-hud rounded-xl p-4 text-left motion-safe:animate-drift [animation-delay:-3.5s]">
+              <div class="flex items-center gap-2">
+                <Icon name="activity" size={16} class="text-tertiary-fixed" />
+                <span class="font-mono text-label-caps uppercase text-on-surface-variant">Host</span>
+              </div>
+              <div class="mt-2.5 grid grid-cols-3 gap-2 font-mono text-tele-sm">
+                <div class="rounded bg-surface-container-high/70 px-2 py-1"><div class="text-outline">VRAM</div><div class="font-bold text-primary">4 GB</div></div>
+                <div class="rounded bg-surface-container-high/70 px-2 py-1"><div class="text-outline">CLOUD</div><div class="font-bold text-primary-container">none</div></div>
+                <div class="rounded bg-surface-container-high/70 px-2 py-1"><div class="text-outline">MODEL</div><div class="font-bold text-tertiary-fixed">ready</div></div>
+              </div>
+              <div class="mt-2.5 flex items-center justify-between gap-6 font-mono text-tele-sm text-on-surface-variant">
+                <span>Engine: Ollama · local</span><span class="font-semibold text-tertiary-fixed">ONLINE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="absolute inset-x-0 bottom-[17%] hidden justify-center px-6 md:flex">
+          <div class="glass-hud w-full max-w-xl rounded-2xl p-4 text-left shadow-[0_0_40px_rgb(0_242_254/0.28)]">
+            <p class="flex items-center justify-end gap-2 text-body-sm text-on-surface-variant">
+              <span class="rounded-full bg-surface-container-high/80 px-3 py-1">yaad dilana 5 baje, call mom</span>
+              <span class="font-mono text-tele-sm uppercase text-outline">You</span>
+            </p>
+            <div class="mt-3 flex items-start gap-3">
+              <span class="grid size-8 shrink-0 place-items-center rounded-full bg-primary-container/15 text-primary-container ring-1 ring-primary-container/30">
+                <Icon name="sparkles" size={16} />
+              </span>
+              <p class="min-h-12">
+                <span class="block font-mono text-tele-sm uppercase tracking-wider text-primary">Elora · local companion</span>
+                <span class="sr-only">{reply}</span>
+                <span class="mt-0.5 block text-body-md text-on-surface" aria-hidden="true" data-type>{reply}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <figcaption class="rounded-b-xl bg-surface-container-low p-4 text-center font-display text-headline-sm font-medium text-primary md:p-5">
+        Elora isn't where you go to use AI. Elora is the AI that stays with you.
+      </figcaption>
+    </figure>
+
+    <!-- Conversation (mobile) -->
+    <div class="glass mt-4 rounded-2xl p-4 md:hidden">
+      <p class="flex items-center justify-end gap-2 text-body-sm text-on-surface-variant">
+        <span class="rounded-full bg-surface-container-high px-3 py-1">yaad dilana 5 baje, call mom</span>
+      </p>
+      <p class="mt-3 text-body-md text-on-surface"><span class="font-semibold text-primary-container">Elora</span> — {reply}</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,104 @@
+---
+import Icon from '../Icon.astro';
+import SectionHeader from '../SectionHeader.astro';
+
+const stages = [
+  { n: '01', name: 'Perceive', icon: 'eye', tone: 'text-primary', body: 'Screen text, the window in front of you, and your voice when you hold to talk.' },
+  { n: '02', name: 'Understand', icon: 'filter', tone: 'text-primary', body: "A gate scores what's new and important: act now, keep for later, or let it go." },
+  { n: '03', name: 'Remember', icon: 'database', tone: 'text-tertiary-fixed', body: 'Pulls from working memory, your timeline, dated facts and semantic search.' },
+  { n: '04', name: 'Reason', icon: 'split', tone: 'text-secondary', body: 'Skip it, make a quick plan, or think step by step with tools — up to seven steps.' },
+  { n: '05', name: 'Verify', icon: 'badge-check', tone: 'text-primary', body: 'Answers are schema-checked, with a plain-code backup ready if the model slips.' },
+  { n: '06', name: 'Act', icon: 'zap', tone: 'text-tertiary-fixed', body: 'About 70 built-in actions plus your own tools. Risky ones wait for your click.' },
+  { n: '07', name: 'Learn', icon: 'refresh-ccw', tone: 'text-primary', body: 'Reflects every few minutes; each night she consolidates — and forgets on purpose.' },
+];
+
+const rhythms = [
+  { label: 'Perceive', every: '~5', unit: 's', note: 'A cheap sensory snapshot. No AI model call.', bar: 'bg-primary-container', width: '34%' },
+  { label: 'Reason', every: '~30', unit: 's', note: 'Or sooner, the moment something happens.', bar: 'bg-azure', width: '66%' },
+  { label: 'Reflect', every: '~5', unit: 'min', note: 'Plus a full consolidation pass every night.', bar: 'bg-tertiary-fixed', width: '100%' },
+];
+const chain = ['cache', 'plain-code backup', 'model', 'schema check', 'answer'];
+---
+
+<section id="cognitive-loop" class="bg-surface px-4 py-24 sm:px-6 md:py-32" aria-labelledby="loop-title">
+  <div class="mx-auto max-w-6xl">
+    <SectionHeader eyebrow="A continuous mind · 7 stages" id="loop-title">
+      <Fragment slot="title">The cognitive loop</Fragment>
+      Elora isn't a chat box waiting for input. A dedicated brain thread keeps running in the background — and
+      steps aside the moment you speak.
+    </SectionHeader>
+
+    <div data-stages class="relative mt-16 pl-8 md:pl-0 md:pt-6">
+      <div data-stage-rail aria-hidden="true" class="absolute top-2 bottom-2 left-[0.6rem] w-px bg-primary-container/15 md:inset-x-0 md:top-0 md:bottom-auto md:h-px md:w-auto">
+        <span class="absolute inset-0 block bg-gradient-to-b from-primary-container via-azure to-tertiary-fixed shadow-[0_0_12px_rgb(0_242_254/0.8)] md:bg-gradient-to-r"></span>
+      </div>
+
+      <ol class="grid grid-cols-1 gap-3 md:grid-cols-7">
+        {
+          stages.map((s) => (
+            <li data-stage class="glass relative flex flex-col rounded-xl p-4">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-tele-sm font-bold text-primary-container">{s.n}</span>
+                <Icon name={s.icon} size={18} class={s.tone} />
+              </div>
+              <h3 class:list={['mt-3 font-display text-base font-medium', s.tone]}>{s.name}</h3>
+              <p class="mt-2 text-[0.8rem] leading-[1.35rem] text-on-surface-variant">{s.body}</p>
+              <span class="stage-bar mt-auto block h-px w-full translate-y-3 bg-primary-container/80 shadow-[0_0_10px_rgb(0_242_254/0.9)]" aria-hidden="true" />
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div class="glass hud-corners mt-10 rounded-2xl p-6 md:p-8" data-reveal>
+      <div class="flex flex-col justify-between gap-4 border-b border-white/5 pb-5 md:flex-row md:items-center">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="led text-tertiary-fixed"></span>
+          <h3 class="font-mono text-tele-md font-semibold uppercase text-on-surface">Three rhythms · one brain</h3>
+          <span class="rounded bg-surface-container-highest px-2 py-0.5 font-mono text-label-caps uppercase text-tertiary-fixed">Always on</span>
+        </div>
+        <p class="font-mono text-tele-sm uppercase text-on-surface-variant">Pauses while you talk</p>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {
+          rhythms.map((r) => (
+            <div class="rounded-xl bg-surface-container-lowest p-5 ring-1 ring-white/5">
+              <p class="font-mono text-label-caps uppercase text-on-surface-variant">{r.label} · every</p>
+              <p class="mt-1 font-mono text-[2rem] font-semibold leading-tight text-on-surface">
+                {r.every}
+                <span class="text-base text-on-surface-variant">{r.unit}</span>
+              </p>
+              <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-surface-container-high">
+                <div data-bar class:list={['h-full rounded-full', r.bar]} style={`width: ${r.width}`} />
+              </div>
+              <p class="mt-3 text-body-sm text-on-surface-variant">{r.note}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <p class="max-w-xl text-body-md text-on-surface">
+          <strong class="font-semibold text-primary-container">A small model that doesn't fall over.</strong>
+          Every structured decision has a plain-code answer worked out first — if the model returns nonsense, she
+          already has a sensible one.
+        </p>
+        <ol class="flex flex-wrap items-center gap-2 font-mono text-tele-sm" aria-label="Decision pipeline">
+          {
+            chain.map((step, i) => (
+              <li class="flex items-center gap-2">
+                {i > 0 && <span class="text-outline" aria-hidden="true">→</span>}
+                <span class="rounded-full px-3 py-1 text-on-surface-variant ring-1 ring-primary-container/25">{step}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <a href="/how-it-works/#scorecard" class="mt-6 inline-flex items-center gap-2 font-mono text-tele-md uppercase text-primary-container hover:text-primary">
+        See her measured intelligence scorecard <Icon name="arrow-right" size={16} />
+      </a>
+    </div>
+  </div>
+</section>

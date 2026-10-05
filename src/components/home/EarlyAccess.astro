@@ -1,0 +1,86 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import workspace from '../../assets/elora-workspace.jpg';
+import { SITE } from '../../data/site';
+
+const ready = Boolean(SITE.signupAction);
+---
+
+<section id="early-access" class="bg-surface-container-lowest px-4 py-24 sm:px-6 md:py-32" aria-labelledby="access-title">
+  <div class="mx-auto max-w-6xl">
+    <div class="relative overflow-hidden rounded-[2rem] ring-1 ring-primary-container/30 shadow-[0_0_70px_rgb(0_242_254/0.14)]" data-reveal>
+      <Picture
+        src={workspace}
+        formats={['avif', 'webp']}
+        widths={[640, 1280]}
+        sizes="(min-width: 1180px) 1152px, 100vw"
+        alt=""
+        loading="lazy"
+        class="absolute inset-0 h-full w-full scale-125 object-cover object-[50%_75%] opacity-70"
+      />
+      <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/85 to-surface-container-lowest/40"></div>
+
+      <div class="relative grid gap-10 p-7 md:p-12 lg:grid-cols-2 lg:items-center lg:p-16">
+        <div>
+          <span class="eyebrow text-primary-container">Early access · Windows 10 &amp; 11</span>
+          <h2 id="access-title" class="mt-5 font-display text-h2 font-bold text-primary" data-split>
+            Be first <span class="text-primary-container text-glow">to meet her.</span>
+          </h2>
+          <p class="mt-5 max-w-md text-body-lg text-on-surface-variant">
+            Elora is in active development. Leave your email and we'll tell you the moment the first public build
+            for Windows is ready.
+          </p>
+          <ul class="mt-7 flex flex-col gap-2.5 font-mono text-tele-md">
+            <li class="flex items-center gap-2.5 text-on-surface"><Icon name="monitor" size={16} class="text-primary-container" />Windows 10 / 11 — first</li>
+            <li class="flex items-center gap-2.5 text-on-surface"><Icon name="cpu" size={16} class="text-primary-container" />4 GB graphics card · 16 GB RAM</li>
+            <li class="flex items-center gap-2.5 text-on-surface-variant"><Icon name="clock" size={16} class="text-outline" />macOS &amp; Linux — not yet</li>
+          </ul>
+        </div>
+
+        <form
+          method="post"
+          action={ready ? SITE.signupAction : undefined}
+          class="glass-hud flex flex-col gap-3 rounded-3xl p-6"
+          data-signup
+          data-ready={String(ready)}
+        >
+          <label for="email" class="font-mono text-label-caps uppercase text-primary-container">Email address</label>
+          <div class="glass-well flex flex-col gap-3 rounded-2xl p-2 sm:flex-row sm:items-center sm:rounded-full">
+            <span class="hidden pl-3 font-mono text-tele-md text-tertiary-fixed sm:inline" aria-hidden="true">ELORA:~$</span>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              inputmode="email"
+              placeholder="you@example.com"
+              class="min-h-12 min-w-0 flex-1 bg-transparent px-3 text-body-lg text-on-surface placeholder:text-outline focus:outline-none"
+            />
+            <button type="submit" class="btn-primary min-h-12 rounded-full px-6">Notify me</button>
+          </div>
+          <p class="text-body-sm text-on-surface-variant" role="status" aria-live="polite" data-signup-status>
+            One email when she ships. Nothing else.
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-20 text-center" data-reveal>
+      <p class="font-display text-h2 font-bold text-primary">Elora · private intelligence for your computer.</p>
+      <p class="mt-3 font-mono text-tele-md uppercase text-on-surface-variant">Your machine. Your rules. Your thoughts.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Until a sign-up provider is configured (SITE.signupAction), say so instead of pretending to subscribe.
+  const form = document.querySelector<HTMLFormElement>('[data-signup]');
+  form?.addEventListener('submit', (e) => {
+    if (form.dataset.ready === 'true') return;
+    e.preventDefault();
+    const status = form.querySelector<HTMLElement>('[data-signup-status]');
+    if (status) status.textContent = "Sign-ups aren't open quite yet — please check back soon.";
+  });
+</script>

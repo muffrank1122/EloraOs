@@ -1,0 +1,33 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  crumbs?: { name: string; path: string }[];
+}
+const { eyebrow, title, lead, crumbs = [] } = Astro.props;
+---
+
+<header class="bg-cosmos relative overflow-hidden px-4 pt-32 pb-16 sm:px-6 md:pt-40 md:pb-20">
+  <div aria-hidden="true" class="pointer-events-none absolute -top-40 left-1/2 h-[26rem] w-[40rem] max-w-[140vw] -translate-x-1/2 rounded-full bg-primary-container/10 blur-[120px]"></div>
+  <div class="relative mx-auto max-w-4xl text-center">
+    {
+      crumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="rise mb-6 font-mono text-tele-sm uppercase text-outline">
+          <ol class="flex items-center justify-center gap-2">
+            <li><a href="/" class="hover:text-primary">Home</a></li>
+            {crumbs.map((c, i) => (
+              <li class="flex items-center gap-2">
+                <span aria-hidden="true">/</span>
+                {i === crumbs.length - 1 ? <span aria-current="page" class="text-on-surface-variant">{c.name}</span> : <a href={c.path} class="hover:text-primary">{c.name}</a>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <span class="rise eyebrow text-primary-container" style="--d: .04s">{eyebrow}</span>
+    <h1 class="rise mt-6 font-display text-[clamp(2.3rem,1.4rem+3.6vw,4rem)] leading-[1.06] font-bold tracking-[-0.03em] text-primary" style="--d: .1s">{title}</h1>
+    <p class="rise mx-auto mt-6 max-w-2xl text-body-lg text-on-surface-variant md:text-[1.2rem] md:leading-8" style="--d: .18s">{lead}</p>
+  </div>
+</header>
