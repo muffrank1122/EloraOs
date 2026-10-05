@@ -1,0 +1,30 @@
+---
+interface Props {
+  eyebrow: string;
+  id?: string;
+  align?: 'center' | 'left';
+  tone?: 'cyan' | 'mint' | 'azure';
+  as?: 'h1' | 'h2';
+}
+
+const { eyebrow, id, align = 'center', tone = 'cyan', as: Tag = 'h2' } = Astro.props;
+const toneClass = {
+  cyan: 'text-primary-container',
+  mint: 'text-tertiary-fixed',
+  azure: 'text-secondary',
+}[tone];
+---
+
+<div class:list={['flex flex-col max-w-3xl', align === 'center' ? 'items-center text-center mx-auto' : 'items-start']}>
+  <span class:list={['eyebrow', toneClass]} data-reveal>{eyebrow}</span>
+  <Tag id={id} class="mt-5 font-display text-h2 font-semibold text-primary" data-split>
+    <slot name="title" />
+  </Tag>
+  {
+    Astro.slots.has('default') && (
+      <p class="mt-5 text-body-lg text-on-surface-variant max-w-2xl" data-reveal>
+        <slot />
+      </p>
+    )
+  }
+</div>

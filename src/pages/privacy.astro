@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+
+const title = 'Privacy: How Elora Keeps Your Life on Your PC';
+const description =
+  'Elora runs on your Windows PC: local models, push-to-talk voice, screen text treated as untrusted, sensitive pages ignored, cloud features opt-in only.';
+const path = '/privacy/';
+const updated = { iso: '2026-10-05', label: '5 October 2026' };
+
+const summary = [
+  { icon: 'hard-drive', title: 'Local by default', body: 'Chat, speech recognition, reasoning and memory run and live on your PC.' },
+  { icon: 'mic', title: 'Push-to-talk', body: 'Only what you say while holding the button is transcribed.' },
+  { icon: 'eye-off', title: 'Looks away', body: 'Banking, password and health pages drop to minimal observation.' },
+  { icon: 'shield', title: 'One network guard', body: 'Cloud features are opt-in and pass through a single switch.' },
+];
+---
+
+<Base title={`${title} | EloraOS`} description={description} pageType="AboutPage" breadcrumbs={[{ name: 'Privacy', path }]}>
+  <PageHeader
+    eyebrow="Privacy by design"
+    title="Your life stays on your machine"
+    lead="Elora is built to live on your PC, not to report back from it. These aren't settings you have to find — they're rules built into how she works."
+    crumbs={[{ name: 'Privacy', path }]}
+  />
+
+  <div class="bg-surface px-4 pb-24 sm:px-6">
+    <div class="mx-auto max-w-5xl">
+      <h2 class="sr-only">The short version</h2>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          summary.map((s) => (
+            <li class="glass rounded-2xl p-5" data-reveal data-spotlight>
+              <span class="grid size-10 place-items-center rounded-xl bg-tertiary-container/15 text-tertiary-fixed">
+                <Icon name={s.icon} size={20} />
+              </span>
+              <h3 class="mt-4 font-display text-[1.1rem] font-medium text-on-surface">{s.title}</h3>
+              <p class="mt-1.5 text-body-sm text-on-surface-variant">{s.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <article class="prose-elora mx-auto mt-16 max-w-3xl">
+        <h2 id="on-your-pc">What stays on your PC</h2>
+        <p>
+          Elora's core runs entirely on your own hardware. The language model is served by <strong>Ollama</strong>
+          on your machine; speech recognition and voice run locally too. Everything she remembers — conversations,
+          the timeline of what she's seen, facts about you and the people you mention — is stored in a local SQLite
+          database and a local vector index in Elora's data folder.
+        </p>
+        <p>You can open that data, and one command wipes all of it.</p>
+
+        <h2 id="internet">What can reach the internet — only if you turn it on</h2>
+        <p>
+          Every outbound request passes through a single network guard. With cloud features off, Elora works without
+          sending your conversations anywhere. You can choose to enable:
+        </p>
+        <ul>
+          <li><strong>A cloud voice</strong> (Edge text-to-speech) instead of the local voices.</li>
+          <li><strong>Online research</strong> with external AI services, under daily budget caps — findings wait in a review queue, and only what you approve is added to her memory.</li>
+          <li><strong>A remote model server</strong> you run yourself, if your PC is too small for the model you want.</li>
+        </ul>
+        <p>Downloading the AI models themselves, the first time, also needs the internet.</p>
+
+        <h2 id="screen">What she sees, and how it's handled</h2>
+        <p>
+          To help in context, Elora periodically reads the text on your screen and notes which app is in front.
+          That text is handled with suspicion:
+        </p>
+        <ul>
+          <li><strong>Screen text is never a command.</strong> It can be remembered and searched, but she will not follow instructions found in it.</li>
+          <li><strong>Sensitive pages are recognised</strong> — banking, password managers, health portals and identity documents — and observation drops to a minimum.</li>
+          <li><strong>Private text is redacted</strong> before anything is saved to her timeline.</li>
+          <li><strong>Sensitive background captures are encrypted</strong> on disk.</li>
+        </ul>
+
+        <h2 id="voice">What she hears</h2>
+        <p>
+          Voice is push-to-talk: click and hold to speak, release when you're done. Only what you say while holding
+          is transcribed, on your PC. Transcribing meeting audio from your speakers is a separate, optional feature.
+        </p>
+
+        <h2 id="control">You stay in control</h2>
+        <ul>
+          <li><strong>Privacy mode</strong> pauses perception entirely.</li>
+          <li><strong>A panic key</strong> hides her instantly.</li>
+          <li><strong>Risky actions</strong> on your desktop wait for your visible approval.</li>
+          <li><strong>Your data is yours</strong> to inspect or delete.</li>
+        </ul>
+
+        <h2 id="website">This website</h2>
+        <p>
+          eloraos.com sets <strong>no cookies</strong> and runs <strong>no analytics or tracking scripts</strong>.
+          Fonts are served from this site, not from a third party. Like any web host, our host (GitHub Pages) may keep
+          standard server logs such as IP addresses.
+        </p>
+        <p>
+          If you sign up for early access, your email address is used for one thing: telling you when Elora is ready.
+        </p>
+        <p class="font-mono text-tele-sm uppercase text-outline">
+          Last updated <time datetime={updated.iso}>{updated.label}</time>
+        </p>
+      </article>
+    </div>
+  </div>
+
+  <CtaBand />
+</Base>

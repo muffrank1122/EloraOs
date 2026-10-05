@@ -1,0 +1,235 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import { SCORECARD, SITE } from '../data/site';
+
+const title = 'How Elora Works: A Local AI With a Continuous Mind';
+const description =
+  'Inside Elora, the local AI companion for Windows: a brain loop that perceives, reasons and reflects, dated memory, safe actions and a measured scorecard.';
+const path = '/how-it-works/';
+
+const toc = [
+  { id: 'continuous-mind', label: 'A mind that keeps running' },
+  { id: 'perception', label: 'What she notices' },
+  { id: 'memory', label: 'How her memory works' },
+  { id: 'reasoning', label: 'Reliable reasoning' },
+  { id: 'actions', label: 'Acting safely' },
+  { id: 'conversation', label: 'Conversation first' },
+  { id: 'time', label: 'Time awareness' },
+  { id: 'presence', label: 'Three ways to see her' },
+  { id: 'scorecard', label: 'Scored, not hyped' },
+];
+
+const article = {
+  '@type': 'TechArticle',
+  '@id': `${SITE.url}${path}#article`,
+  headline: title,
+  description,
+  inLanguage: 'en',
+  datePublished: '2026-10-05',
+  dateModified: new Date().toISOString(),
+  author: { '@id': `${SITE.url}/#organization` },
+  publisher: { '@id': `${SITE.url}/#organization` },
+  mainEntityOfPage: { '@id': `${SITE.url}${path}#webpage` },
+  about: { '@id': `${SITE.url}/#software` },
+  image: `${SITE.url}${SITE.ogImage}`,
+};
+---
+
+<Base title={`${title} | EloraOS`} description={description} ogType="article" breadcrumbs={[{ name: 'How it works', path }]} schema={[article]}>
+  <PageHeader
+    eyebrow="Under the glass"
+    title="How Elora works"
+    lead="A local AI companion with a continuous mind: she perceives, reasons and reflects on her own schedule, keeps dated memories on your PC, and acts only within rules you can read."
+    crumbs={[{ name: 'How it works', path }]}
+  />
+
+  <div class="bg-surface px-4 pb-24 sm:px-6">
+    <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[15rem_1fr]">
+      <aside class="hidden lg:block">
+        <nav aria-label="On this page" class="sticky top-28">
+          <p class="font-mono text-label-caps uppercase text-outline">On this page</p>
+          <ol class="mt-4 flex flex-col gap-1 border-l border-white/10">
+            {
+              toc.map((t) => (
+                <li>
+                  <a href={`#${t.id}`} class="-ml-px block border-l border-transparent py-1.5 pl-4 text-body-sm text-on-surface-variant transition-colors hover:border-primary-container hover:text-primary">
+                    {t.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+      </aside>
+
+      <article class="prose-elora min-w-0 max-w-3xl">
+        <p class="text-[1.2rem] leading-8 text-on-surface">
+          Most AI assistants are a text box connected to a server. Elora is a program that lives on your Windows PC
+          and keeps running in the background: she looks, decides what matters, remembers, and acts — using local
+          models through <strong>Ollama</strong>, so your conversations never need to leave your machine.
+        </p>
+
+        <h2 id="continuous-mind">A mind that keeps running</h2>
+        <p>
+          A dedicated brain thread runs three interleaved rhythms. None of them gets in your way: the moment you
+          start talking, background work pauses and any running model call is cancelled so she can answer you
+          first.
+        </p>
+        <div class="my-8 grid gap-3 sm:grid-cols-3">
+          <div class="glass rounded-xl p-5" data-reveal>
+            <p class="font-mono text-label-caps uppercase text-primary-container">Perceive · ~5 s</p>
+            <p class="mt-2 text-body-sm text-on-surface-variant">A cheap snapshot of what's happening, scored for importance. No AI model call.</p>
+          </div>
+          <div class="glass rounded-xl p-5" data-reveal>
+            <p class="font-mono text-label-caps uppercase text-azure">Reason · ~30 s</p>
+            <p class="mt-2 text-body-sm text-on-surface-variant">Thinks over working memory, goals, recent events and open promises — or sooner when something happens.</p>
+          </div>
+          <div class="glass rounded-xl p-5" data-reveal>
+            <p class="font-mono text-label-caps uppercase text-tertiary-fixed">Reflect · ~5 min</p>
+            <p class="mt-2 text-body-sm text-on-surface-variant">Spots patterns, corrects herself, calibrates her nudges and consolidates memory.</p>
+          </div>
+        </div>
+        <p>
+          Each night a longer <strong>consolidation cycle</strong> distils the day's timeline into lasting memories,
+          prunes stale data and runs a forgetting pass — the same way a good night's sleep sorts what to keep.
+        </p>
+
+        <h2 id="perception">What she notices — and what she ignores</h2>
+        <p>
+          Elora reads the text on your screen (with on-device OCR), tracks which app and window is in front, and
+          hears you when you hold the talk button. For meetings you can optionally let her transcribe system audio
+          too.
+        </p>
+        <p>Not everything is worth a thought. Every observation passes a gate before it reaches her reasoning:</p>
+        <ul>
+          <li><strong>Urgent keywords</strong> skip the queue.</li>
+          <li>Everything else is scored for <strong>novelty, repetition and relevance</strong> to what you're doing.</li>
+          <li>The score lands in one of three bands — <strong>act now, keep for later, or let it go</strong>.</li>
+          <li>Only genuinely ambiguous items are sent to the model for a second opinion.</li>
+        </ul>
+        <p>The gate learns over time which signals matter to you, and which are noise.</p>
+
+        <h2 id="memory">How her memory works</h2>
+        <p>
+          Elora doesn't paste old chat logs into a prompt. Her memory is layered, and a single retrieval step fans a
+          question out across every layer and ranks the results together:
+        </p>
+        <ul>
+          <li><strong>Working memory</strong> — 7±2 slots of what's on her mind right now, kept across restarts.</li>
+          <li><strong>Timeline</strong> — a SQLite record of your day with full-text search.</li>
+          <li><strong>Semantic recall</strong> — a local vector index (ChromaDB) for "that thing we talked about".</li>
+          <li><strong>Dated facts</strong> — a fact graph about you and the people around you, every fact time-stamped.</li>
+          <li><strong>Editable memory blocks</strong> — labelled notes she can update, with full version history.</li>
+        </ul>
+        <p>
+          Because every fact carries a date, old news never reads as current. And anything that changes with time —
+          someone's age, an anniversary, years of experience — is <strong>computed from stored dates</strong> rather
+          than stored as a number that quietly goes stale.
+        </p>
+
+        <h2 id="reasoning">Reliable reasoning from a small model</h2>
+        <p>
+          A 3-billion-parameter model on a 4 GB graphics card can be brilliant one minute and confidently wrong the
+          next. Elora is engineered around that:
+        </p>
+        <ul>
+          <li>Each moment is routed to <strong>skip</strong>, a <strong>fast plan</strong> (checked by a separate verifier), or <strong>deliberate</strong> reasoning — a step-by-step loop of up to seven steps that can call tools mid-thought.</li>
+          <li>Every structured model call is <strong>validated against a schema</strong>. Invalid output is rejected, not guessed at.</li>
+          <li>A <strong>plain-code heuristic</strong> answers each decision first and competes with the model, so a sensible fallback always exists.</li>
+          <li>Repeated decisions are served from a local <strong>cache</strong>, and every call outcome is logged to catch regressions.</li>
+        </ul>
+        <p>She also makes small, checkable predictions about your day and grades herself against what actually happens.</p>
+
+        <h2 id="actions">Acting on your behalf — safely</h2>
+        <p>
+          Elora has around <strong>70 built-in actions</strong>: speaking, notifications, reminders and tasks, memory,
+          files, research sessions and browser automation. You can plug in more through the
+          <strong>Model Context Protocol (MCP)</strong>.
+        </p>
+        <ul>
+          <li>Every action goes through one <strong>risk policy</strong>; risky desktop actions wait for your visible approval.</li>
+          <li>Text from your screen is <strong>untrusted input</strong> — it can be remembered, never obeyed.</li>
+          <li>Web pages she reads are sanitised and fenced off before any model sees them, to blunt prompt injection.</li>
+        </ul>
+
+        <h2 id="conversation">Conversation comes first</h2>
+        <p>
+          Replies stream and are spoken sentence by sentence. Talk over her and she stops, drops the rest of that
+          reply and answers the new thing. Voice is push-to-talk: click and hold, speak, release — speech becomes
+          text in about a second, and the microphone stays warm for a minute so your next word isn't clipped.
+        </p>
+        <p>
+          She keeps turns short, reacts first, and follows you between <strong>English and Roman Urdu</strong>
+          without missing a beat.
+        </p>
+
+        <h2 id="time">She knows what day it is</h2>
+        <p>
+          Language models are bad at calendars, so Elora doesn't ask them. Phrases like "in 10 days", "agle juma" or
+          "parson" are calculated in code and handed to the model with your message. Say "remind me after lunch" or
+          "yaad dilana 5 baje" and it's scheduled in your time zone and confirmed back; leave out the time and she
+          asks when.
+        </p>
+        <p>
+          Come back after two days and she knows how long you were gone, which reminders went off and what got done.
+          Optionally she can also read your calendar (an .ics file or private iCal link) and offline prayer times.
+        </p>
+
+        <h2 id="presence">Three ways to see her</h2>
+        <ul>
+          <li><strong>The glass workspace</strong> — a calm HUD with chat, memory and live status.</li>
+          <li><strong>The command center</strong> — a full desktop app with chat, tasks and settings.</li>
+          <li><strong>A 3D avatar</strong> — a WebGL companion that lip-syncs as she speaks.</li>
+        </ul>
+
+        <h2 id="scorecard">Scored, not hyped</h2>
+        <p>
+          Other AIs tell you they're smart. Elora is measured: a scoring tool rates her out of ten on seven axes,
+          using her own live database. Where no test exists yet, the score is a question mark — because an unknown
+          needs a test, and a zero needs a fix. Collapsing the two is how a scorecard starts lying.
+        </p>
+
+        <div class="glass hud-corners my-8 rounded-2xl p-6 md:p-8" data-reveal>
+          <div class="flex items-baseline justify-between gap-4">
+            <p class="font-mono text-label-caps uppercase text-primary-container">
+              Intelligence · <time datetime={SCORECARD.date}>{SCORECARD.dateLabel}</time>
+            </p>
+            <p class="font-mono text-[2rem] font-semibold text-on-surface text-glow">
+              <span data-count={SCORECARD.overall.toFixed(1)}>{SCORECARD.overall.toFixed(1)}</span><span class="text-base text-on-surface-variant">/10</span>
+            </p>
+          </div>
+          <ul class="mt-6 flex flex-col gap-4">
+            {
+              SCORECARD.axes.map((axis) => (
+                <li>
+                  <div class="flex items-baseline justify-between gap-4">
+                    <p class="text-body-md text-on-surface">
+                      {axis.name} <span class="text-body-sm text-outline">— {axis.question}</span>
+                    </p>
+                    <span class="font-mono text-tele-lg text-on-surface">{axis.score === null ? '?' : axis.score.toFixed(1)}</span>
+                  </div>
+                  {axis.score === null ? (
+                    <div class="mt-2 h-1.5 rounded-full border border-dashed border-primary-container/40" />
+                  ) : (
+                    <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-primary-container/10">
+                      <div data-bar class="h-full rounded-full bg-primary-container shadow-[0_0_10px_rgb(0_242_254/0.8)]" style={`width: ${axis.score * 10}%`} />
+                    </div>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-6 flex items-start gap-2 text-body-sm text-on-surface-variant">
+            <Icon name="circle-help" size={16} class="mt-0.5 shrink-0 text-outline" />
+            Expression has no probe yet, so it is shown as unknown rather than zero. The overall score is the mean of the measured axes.
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <CtaBand />
+</Base>

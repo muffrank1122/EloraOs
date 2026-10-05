@@ -1,0 +1,20 @@
+# Elora
+
+> Elora is a private, local-first AI companion for Windows 10 and 11. She runs on the user's own PC through Ollama, sees what is on screen, listens with push-to-talk, keeps dated layered memory locally, and can act on the desktop with visible approval for risky actions. She speaks English, Roman Urdu or a mix. Elora is in active development; early access is by email sign-up at eloraos.com.
+
+Key facts:
+
+- Platform: Windows 10 / 11. Not available for macOS or Linux.
+- Hardware: graphics card with 4 GB of memory (tuned on a GTX 1650), 16 GB RAM minimum, 32 GB comfortable.
+- Models: local, served by Ollama. Default chat model Llama 3.2 3B tuned to stay fully on a 4 GB GPU (about 54 tokens/s on a GTX 1650). Local Whisper speech recognition (IndicWhisper for Urdu/Hindi); Kokoro and Piper voices.
+- Privacy: chat, speech recognition and reasoning run locally; cloud features are opt-in behind one network guard; screen text is treated as untrusted and never followed as an instruction; banking, password and health pages drop to minimal observation.
+- Mind: perceives every ~5 s, reasons every ~30 s, reflects every ~5 min, consolidates and forgets nightly.
+- Actions: about 70 built-in actions plus MCP tools, under one risk policy.
+- Pricing: not announced.
+
+## Pages
+
+- [Overview](https://eloraos.com/): what Elora is, the cognitive loop, memory, personality, requirements, privacy and early access
+- [How it works](https://eloraos.com/how-it-works/): the brain loop, perception gate, layered memory, reliable reasoning with a small model, safe actions, time awareness, and the measured intelligence scorecard
+- [Privacy](https://eloraos.com/privacy/): what stays on the PC, what can reach the internet and only when enabled, screen and voice handling, and this website's privacy
+- [FAQ](https://eloraos.com/faq/): common questions about offline use, hardware, languages, data storage and availability
