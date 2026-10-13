@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+const path = '/get-started/';
+const steps = [
+  { n: '01', title: 'Prepare your Windows PC', body: 'Install Python 3.13 and Ollama. Source builds of the HUD and avatar also use Node.js. Tesseract is needed for screen OCR. Start with at least 16 GB RAM; the reference GPU is a 4 GB GTX 1650.' },
+  { n: '02', title: 'Set up your source checkout', body: 'If you already have the Elora source, run setup_elora.bat from its folder. The setup creates the virtual environment, installs dependencies, pulls models and prepares a configuration file from the example.' },
+  { n: '03', title: 'Choose your configuration', body: 'Review the generated .env: choose the local backend and models, set your name and IANA time zone, and check which observers are enabled. Start locally; optional cloud features require their own flags and credentials.' },
+  { n: '04', title: 'Launch and check the HUD', body: 'Use the virtual environment created by setup, then launch the HUD. Its boot monitor shows service readiness and failures. Hold the mic button to speak, or type a first message.' },
+];
+---
+<Base title="Get Started with Elora — Windows Setup & Availability" description="Elora is in active development. Check Windows requirements, learn the source setup, and understand optional cloud, desktop and Google integrations." breadcrumbs={[{ name: 'Get started', path }]}>
+  <PageHeader eyebrow="Windows · active development" title="Your first steps with Elora." lead="Here is what you need to run a source checkout, and what to expect from the current development build." crumbs={[{ name: 'Get started', path }]} />
+  <div class="px-4 pb-24 sm:px-6">
+    <div class="mx-auto max-w-5xl">
+      <aside class="glass mb-12 rounded-2xl p-6" aria-labelledby="availability-title">
+        <div class="flex items-center gap-3 text-tertiary-fixed"><Icon name="info" size={22} /><h2 id="availability-title" class="font-display text-headline-sm">Availability today</h2></div>
+        <p class="mt-3 text-on-surface-variant">This website does not currently distribute a public installer or accept waitlist signups. The instructions below are for people who already have the source project. A public release date and commercial pricing have not been announced here.</p>
+      </aside>
+      <ol class="grid gap-6 md:grid-cols-2">{steps.map((step) => (<li class="glass rounded-2xl p-7" data-reveal><span class="font-mono text-2xl text-primary-container">{step.n}</span><h2 class="mt-5 font-display text-headline-sm text-primary">{step.title}</h2><p class="mt-3 text-on-surface-variant">{step.body}</p></li>))}</ol>
+      <section class="mt-10 rounded-2xl bg-surface-container-lowest p-6 ring-1 ring-primary-container/20 md:p-8" aria-labelledby="commands-title">
+        <h2 id="commands-title" class="font-display text-headline-sm text-primary">From the Elora source folder</h2>
+        <p class="mt-3 text-on-surface-variant">Run setup first. Review your configuration before launching. These commands are shown for a Windows PowerShell session.</p>
+        <pre class="mt-6 overflow-x-auto rounded-xl bg-black/40 p-5 font-mono text-body-sm leading-7 text-tertiary-fixed"><code>.\setup_elora.bat
+# Review .env before starting Elora
+.\.venv\Scripts\python.exe elora.py --ui=hud</code></pre>
+        <p class="mt-4 text-body-sm text-on-surface-variant">Model downloads need internet access. Performance depends on your chosen models, hardware and enabled services.</p>
+      </section>
+      <section class="prose-elora mt-12" aria-labelledby="optional-title">
+        <h2 id="optional-title">Add connections when you need them</h2>
+        <ul>
+          <li><strong>GroqCloud:</strong> hybrid mode, your own key and individual speech, chat or voice flags. The background brain stays local.</li>
+          <li><strong>Desktop control:</strong> enable Windows-MCP and the desktop agent. Its server uses uv and Python 3.14 separately from Elora's runtime.</li>
+          <li><strong>Google Workspace:</strong> create an OAuth client, enable the Google APIs, sign in and configure the Workspace MCP server. An API key alone cannot access your private mail or Drive.</li>
+          <li><strong>Hermes hands:</strong> experimental and disabled by default. A served model with at least 64K context is required; the baseline 8K model cannot run it.</li>
+        </ul>
+        <p><a href="/capabilities/">Review each capability and its requirements</a> before enabling it. <a href="/privacy/">Check what connected features send</a> before choosing cloud processing.</p>
+        <h2>Keep expectations grounded</h2>
+        <p>Elora is still under development. Memory recall, action reliability and voice quality vary. The published <a href="/how-it-works/#scorecard">4 October scorecard</a> is a historical measurement, not a score for your installation or a newer release.</p>
+      </section>
+    </div>
+  </div>
+</Base>

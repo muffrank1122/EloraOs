@@ -29,13 +29,13 @@ const overlay = Buffer.from(`
     <path d="M12 7.2l4.2 2.4v4.8L12 16.8l-4.2-2.4V9.6z" transform="scale(2)" fill="#00f2fe"/>
     <text x="64" y="34" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="9" fill="#e0fdff">ELORA</text>
   </g>
-  <text x="72" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700" fill="#e0fdff" letter-spacing="-1.5">Not in the cloud.</text>
+  <text x="72" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700" fill="#e0fdff" letter-spacing="-1.5">A mind of her own.</text>
   <text x="72" y="370" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700" fill="#00f2fe" letter-spacing="-1.5">Right here with you.</text>
-  <text x="72" y="448" font-family="Segoe UI, Arial, sans-serif" font-size="27" fill="#b9cacb">The private AI companion that runs on your Windows PC.</text>
+  <text x="72" y="448" font-family="Segoe UI, Arial, sans-serif" font-size="27" fill="#b9cacb">Your local-first AI companion for Windows.</text>
   <g transform="translate(72 512)">
     <rect width="252" height="44" rx="22" fill="#0b0e16" fill-opacity="0.8" stroke="#64ff92" stroke-opacity="0.45"/>
     <circle cx="26" cy="22" r="6" fill="#64ff92"/>
-    <text x="44" y="29" font-family="Consolas, monospace" font-size="19" fill="#64ff92" letter-spacing="1">ON-DEVICE · LOCAL</text>
+    <text x="44" y="29" font-family="Consolas, monospace" font-size="19" fill="#64ff92" letter-spacing="1">LOCAL-FIRST</text>
   </g>
   <text x="${W - 72}" y="${H - 42}" text-anchor="end" font-family="Consolas, monospace" font-size="20" fill="#8a9a9b" letter-spacing="2">ELORAOS.COM</text>
 </svg>`);

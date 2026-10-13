@@ -8,7 +8,7 @@ const stages = [
   { n: '03', name: 'Remember', icon: 'database', tone: 'text-tertiary-fixed', body: 'Pulls from working memory, your timeline, dated facts and semantic search.' },
   { n: '04', name: 'Reason', icon: 'split', tone: 'text-secondary', body: 'Skip it, make a quick plan, or think step by step with tools — up to seven steps.' },
   { n: '05', name: 'Verify', icon: 'badge-check', tone: 'text-primary', body: 'Answers are schema-checked, with a plain-code backup ready if the model slips.' },
-  { n: '06', name: 'Act', icon: 'zap', tone: 'text-tertiary-fixed', body: 'About 70 built-in actions plus your own tools. Risky ones wait for your click.' },
+  { n: '06', name: 'Act', icon: 'zap', tone: 'text-tertiary-fixed', body: 'Built-in actions and MCP tools pass through a risk policy. Desktop control stays owner-directed.' },
   { n: '07', name: 'Learn', icon: 'refresh-ccw', tone: 'text-primary', body: 'Reflects every few minutes; each night she consolidates — and forgets on purpose.' },
 ];
 
@@ -80,9 +80,9 @@ const chain = ['cache', 'plain-code backup', 'model', 'schema check', 'answer'];
 
       <div class="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <p class="max-w-xl text-body-md text-on-surface">
-          <strong class="font-semibold text-primary-container">A small model that doesn't fall over.</strong>
-          Every structured decision has a plain-code answer worked out first — if the model returns nonsense, she
-          already has a sensible one.
+          <strong class="font-semibold text-primary-container">Checks around a small model.</strong>
+          Structured output validation and plain-code fallbacks help catch invalid decisions. They do not make
+          every answer correct; the scorecard tracks measured limitations.
         </p>
         <ol class="flex flex-wrap items-center gap-2 font-mono text-tele-sm" aria-label="Decision pipeline">
           {
@@ -97,7 +97,7 @@ const chain = ['cache', 'plain-code backup', 'model', 'schema check', 'answer'];
       </div>
 
       <a href="/how-it-works/#scorecard" class="mt-6 inline-flex items-center gap-2 font-mono text-tele-md uppercase text-primary-container hover:text-primary">
-        See her measured intelligence scorecard <Icon name="arrow-right" size={16} />
+        See the historical intelligence scorecard <Icon name="arrow-right" size={16} />
       </a>
     </div>
   </div>

@@ -1,0 +1,20 @@
+# Upload this hidden file with the contents of dist/ to the domain's document root.
+# Requires Apache 2.4, mod_rewrite and a valid SSL certificate for both hostnames.
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+# Let cPanel AutoSSL / ACME validate and renew certificates over HTTP.
+RewriteRule ^\.well-known/(acme-challenge|pki-validation)/ - [L]
+
+# Canonical HTTPS domain; Apache retains the original path and query string.
+# Do not trust client-supplied X-Forwarded-Proto headers on a direct Apache host.
+RewriteCond %{HTTP_HOST} ^(?:www\.)?eloraos\.com(?::[0-9]+)?$ [NC]
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^eloraos\.com$ [NC]
+RewriteRule ^ https://eloraos.com%{REQUEST_URI} [R=301,L,NE]
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
