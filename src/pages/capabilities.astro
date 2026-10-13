@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+const path = '/capabilities/';
+const connections = [
+  { id: 'voice', icon: 'mic', status: 'Local by default', title: 'Voice that follows the conversation', body: 'Hold the HUD mic button to talk. Replies stream sentence by sentence, and you can interrupt. Optional hands-free listening checks locally for “Elora.” Meeting audio and experimental full-duplex calls are separate options.', needs: 'Local speech and voice models; a microphone. Groq speech, chat and English TTS can be enabled separately in hybrid mode.', boundary: 'Cloud speech sends captured clips; cloud voice sends text. English and Roman Urdu conversation support does not mean every voice can speak both.' },
+  { id: 'desktop', icon: 'mouse-pointer-2', status: 'Optional · off by default', title: 'Your words, desktop actions', body: 'Ask Elora to open an application, switch a window or type a message. Use /do followed by a task to explicitly route it to the desktop agent. The agent looks again after each step and works within a step limit.', needs: 'Windows-MCP, uv/Python 3.14 for that server, a Groq key, hybrid mode and desktop control enabled. Elora itself uses Python 3.13.', boundary: 'Focused-window text goes to Groq after redaction; screenshots stay local. System operations wait for visible approval. The background brain cannot operate this agent.' },
+  { id: 'google', icon: 'mail', status: 'Optional · Google sign-in', title: 'Gmail, Calendar and Drive', body: 'Ask about your inbox, find upcoming meetings, read Drive files, or prepare an email and save notes. The Workspace MCP integration connects your own Google account through OAuth.', needs: 'One-time Google OAuth client setup, enabled Gmail/Calendar/Drive APIs, account authorization and the Workspace MCP server.', boundary: 'Reads may run automatically. Drafts, sends, creates, updates, uploads and deletes require approval. Google content used by enabled cloud chat or voice can also go to Groq.' },
+  { id: 'memory', icon: 'database', status: 'Local core', title: 'Context that stays with you', body: 'A local timeline, semantic search, dated facts and editable memory blocks support recall. The background mind perceives, reasons and reflects, and a nightly process consolidates and forgets.', needs: 'Local SQLite and vector storage, configured models and the observers you choose to enable.', boundary: 'Recall is still being improved. Background and conversational memory are not yet fully unified. Stored context may enter prompts when cloud chat is enabled.' },
+  { id: 'hermes', icon: 'wrench', status: 'Experimental · off by default', title: 'Hermes hands', body: 'An optional sidecar integration delegates bounded research, file and code tasks while Elora retains the planning, memory and approval policy. Reviewed artifacts can be promoted into approved workspaces.', needs: 'A compatible model served with at least 64K context. The default 8K local setup does not qualify. Code tasks additionally require enabled Docker support; web research requires its own opt-in and network access.', boundary: 'The documented verification reached the model-context gate on the baseline setup; it is not an end-to-end capability guarantee. Inner tool operations use approve-once or deny, with no always-allow option.' },
+];
+---
+<Base title="Elora Capabilities — Voice, Desktop & Connected Tools" description="Explore Elora's voice, local memory, desktop control, Google Workspace integration and experimental Hermes hands, including requirements and approval boundaries." breadcrumbs={[{ name: 'Capabilities', path }]}>
+  <PageHeader eyebrow="What Elora can do" title="One companion. More ways to help." lead="Start with conversation and local memory. Add the tools you need, with clear requirements and approval boundaries for each connection." crumbs={[{ name: 'Capabilities', path }]} />
+  <div class="px-4 pb-24 sm:px-6">
+    <div class="mx-auto max-w-5xl">
+      <nav aria-label="Capability sections" class="mb-10 flex flex-wrap gap-3">{connections.map((item) => <a href={'#' + item.id} class="rounded-full border border-primary-container/25 px-4 py-2 text-body-sm text-primary hover:bg-primary-container/10">{item.id === 'google' ? 'Google Workspace' : item.id === 'hermes' ? 'Hermes hands' : item.id.charAt(0).toUpperCase() + item.id.slice(1)}</a>)}</nav>
+      <div class="space-y-8">
+        {connections.map((item) => (
+          <section id={item.id} aria-labelledby={item.id + '-title'} class="glass rounded-3xl p-6 md:p-10" data-reveal>
+            <div class="flex flex-wrap items-center gap-3 text-primary-container"><Icon name={item.icon} size={26} /><span class="font-mono text-tele-sm uppercase">{item.status}</span></div>
+            <h2 id={item.id + '-title'} class="mt-5 font-display text-h2 font-semibold text-primary">{item.title}</h2>
+            <p class="mt-4 max-w-3xl text-body-lg text-on-surface-variant">{item.body}</p>
+            <div class="mt-7 grid gap-6 border-t border-white/10 pt-6 md:grid-cols-2">
+              <div><h3 class="font-mono text-label-caps uppercase text-tertiary-fixed">What you need</h3><p class="mt-3 text-on-surface-variant">{item.needs}</p></div>
+              <div><h3 class="font-mono text-label-caps uppercase text-secondary">Know the boundary</h3><p class="mt-3 text-on-surface-variant">{item.boundary}</p></div>
+            </div>
+          </section>
+        ))}
+      </div>
+      <p class="mt-10 text-center text-on-surface-variant">For data handling across these features, <a href="/privacy/" class="text-primary-container underline">read the privacy model</a>.</p>
+    </div>
+  </div>
+  <CtaBand />
+</Base>

@@ -48,7 +48,7 @@ const site = Astro.site ?? new URL(SITE.url);
 const canonical = new URL(Astro.url.pathname, site).href;
 const imageUrl = new URL(image, site).href;
 const id = (fragment: string) => `${SITE.url}/#${fragment}`;
-const modified = new Date().toISOString();
+const modified = SITE.contentUpdated;
 
 const graph: JsonLd[] = [
   {
@@ -83,7 +83,6 @@ const graph: JsonLd[] = [
     processorRequirements: 'Graphics card with 4 GB of memory (GTX 1650 class)',
     inLanguage: ['en', 'ur'],
     image: new URL(SITE.ogImage, site).href,
-    screenshot: new URL(SITE.screenshot, site).href,
     featureList: [...FEATURES],
     publisher: { '@id': id('organization') },
   },
@@ -125,6 +124,13 @@ const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': grap
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
+    <!-- Apache redirects before serving HTML. This is a fallback for hosts ignoring .htaccess. -->
+    <script is:inline>
+      if (['eloraos.com', 'www.eloraos.com'].includes(location.hostname) &&
+          (location.protocol !== 'https:' || location.hostname !== 'eloraos.com')) {
+        location.replace('https://eloraos.com' + location.pathname + location.search + location.hash);
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />

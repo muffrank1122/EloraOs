@@ -19,6 +19,8 @@ const toc = [
   { id: 'conversation', label: 'Conversation first' },
   { id: 'time', label: 'Time awareness' },
   { id: 'presence', label: 'Three ways to see her' },
+  { id: 'connections', label: 'Optional connections' },
+  { id: 'limitations', label: 'Current limitations' },
   { id: 'scorecard', label: 'Scored, not hyped' },
 ];
 
@@ -29,7 +31,7 @@ const article = {
   description,
   inLanguage: 'en',
   datePublished: '2026-10-05',
-  dateModified: new Date().toISOString(),
+  dateModified: SITE.contentUpdated,
   author: { '@id': `${SITE.url}/#organization` },
   publisher: { '@id': `${SITE.url}/#organization` },
   mainEntityOfPage: { '@id': `${SITE.url}${path}#webpage` },
@@ -67,9 +69,9 @@ const article = {
 
       <article class="prose-elora min-w-0 max-w-3xl">
         <p class="text-[1.2rem] leading-8 text-on-surface">
-          Most AI assistants are a text box connected to a server. Elora is a program that lives on your Windows PC
-          and keeps running in the background: she looks, decides what matters, remembers, and acts — using local
-          models through <strong>Ollama</strong>, so your conversations never need to leave your machine.
+          Elora lives on your Windows PC and keeps running in the background: she observes, reasons and remembers.
+          The brain, vision, embeddings and memory stay local. Chat, speech recognition and voice are local by
+          default, with separate opt-ins for <strong>GroqCloud</strong> processing.
         </p>
 
         <h2 id="continuous-mind">A mind that keeps running</h2>
@@ -114,8 +116,8 @@ const article = {
 
         <h2 id="memory">How her memory works</h2>
         <p>
-          Elora doesn't paste old chat logs into a prompt. Her memory is layered, and a single retrieval step fans a
-          question out across every layer and ranks the results together:
+          Elora combines several memory stores to retrieve relevant context. These layers support different
+          conversation and background paths; they are still being brought together:
         </p>
         <ul>
           <li><strong>Working memory</strong> — 7±2 slots of what's on her mind right now, kept across restarts.</li>
@@ -125,7 +127,7 @@ const article = {
           <li><strong>Editable memory blocks</strong> — labelled notes she can update, with full version history.</li>
         </ul>
         <p>
-          Because every fact carries a date, old news never reads as current. And anything that changes with time —
+          Dates help distinguish old facts from current ones. Anything that changes with time —
           someone's age, an anniversary, years of experience — is <strong>computed from stored dates</strong> rather
           than stored as a number that quietly goes stale.
         </p>
@@ -145,7 +147,7 @@ const article = {
 
         <h2 id="actions">Acting on your behalf — safely</h2>
         <p>
-          Elora has around <strong>70 built-in actions</strong>: speaking, notifications, reminders and tasks, memory,
+          Elora has <strong>built-in actions</strong> for speaking, notifications, reminders and tasks, memory,
           files, research sessions and browser automation. You can plug in more through the
           <strong>Model Context Protocol (MCP)</strong>.
         </p>
@@ -155,15 +157,18 @@ const article = {
           <li>Web pages she reads are sanitised and fenced off before any model sees them, to blunt prompt injection.</li>
         </ul>
 
+        <p>The optional desktop agent runs only on an owner request, through Windows-MCP and Groq. It can click, type and launch apps; PowerShell, closing programs, registry and raw file operations still wait for approval. The background brain cannot use it. Screenshots stay local, while redacted focused-window text goes to Groq.</p>
+
         <h2 id="conversation">Conversation comes first</h2>
         <p>
           Replies stream and are spoken sentence by sentence. Talk over her and she stops, drops the rest of that
-          reply and answers the new thing. Voice is push-to-talk: click and hold, speak, release — speech becomes
-          text in about a second, and the microphone stays warm for a minute so your next word isn't clipped.
+          reply and answers the new thing. Voice is push-to-talk: click and hold, speak, release. A configurable
+          warm microphone keeps a short in-memory buffer between presses. Optional hands-free mode uses a local
+          name check; meeting capture and experimental full-duplex calls are separate options.
         </p>
         <p>
           She keeps turns short, reacts first, and follows you between <strong>English and Roman Urdu</strong>
-          without missing a beat.
+          in the same conversation. Speech accuracy and voice language support depend on the selected engines.
         </p>
 
         <h2 id="time">She knows what day it is</h2>
@@ -180,22 +185,29 @@ const article = {
 
         <h2 id="presence">Three ways to see her</h2>
         <ul>
-          <li><strong>The glass workspace</strong> — a calm HUD with chat, memory and live status.</li>
+          <li><strong>The glass workspace</strong> — a HUD with chat, memory, live status and a boot monitor showing which services are ready, disabled or failed.</li>
           <li><strong>The command center</strong> — a full desktop app with chat, tasks and settings.</li>
           <li><strong>A 3D avatar</strong> — a WebGL companion that lip-syncs as she speaks.</li>
         </ul>
 
-        <h2 id="scorecard">Scored, not hyped</h2>
+        <h2 id="connections">Optional connections</h2>
+        <p>GroqCloud can handle speech recognition, chat and voice independently in hybrid mode, falling back to local engines on failure. Google Workspace uses your OAuth authorization to access Gmail, Calendar and Drive; writes require approval. Content from those services may be sent to Groq if cloud chat or voice uses it.</p>
+        <p><strong>Hermes hands</strong> is an experimental sidecar for bounded research, file and code tasks. It is disabled by default and requires a compatible model served with at least 64K context. The baseline 8K local model fails that gate; code tasks also require Docker. See <a href="/capabilities/">capabilities and requirements</a>.</p>
+
+        <h2 id="limitations">A product still being built</h2>
+        <p>The product README records gaps in memory sharing between conversation and the background brain, action reliability and evaluation coverage. In particular, a fact in background memory is not a guarantee that a conversational reply will retrieve it. No new intelligence benchmark was run for this website update.</p>
+
+        <h2 id="scorecard">A historical, measured snapshot</h2>
         <p>
-          Other AIs tell you they're smart. Elora is measured: a scoring tool rates her out of ten on seven axes,
-          using her own live database. Where no test exists yet, the score is a question mark — because an unknown
-          needs a test, and a zero needs a fix. Collapsing the two is how a scorecard starts lying.
+          This is the <strong>4 October 2026</strong> measurement preserved in the product README, not a current
+          release benchmark. The scorer uses one installation's database. Where a probe was missing, the score is
+          a question mark. Results depend on the dataset and sample sizes and should not be generalized to every PC.
         </p>
 
         <div class="glass hud-corners my-8 rounded-2xl p-6 md:p-8" data-reveal>
           <div class="flex items-baseline justify-between gap-4">
             <p class="font-mono text-label-caps uppercase text-primary-container">
-              Intelligence · <time datetime={SCORECARD.date}>{SCORECARD.dateLabel}</time>
+              Historical snapshot · <time datetime={SCORECARD.date}>{SCORECARD.dateLabel}</time>
             </p>
             <p class="font-mono text-[2rem] font-semibold text-on-surface text-glow">
               <span data-count={SCORECARD.overall.toFixed(1)}>{SCORECARD.overall.toFixed(1)}</span><span class="text-base text-on-surface-variant">/10</span>

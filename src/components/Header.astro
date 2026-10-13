@@ -36,10 +36,10 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
     <div class="flex items-center gap-3">
       <span class="hidden items-center gap-2 rounded-full bg-surface-container-low/80 px-3 py-1.5 font-mono text-tele-sm text-on-surface ring-1 ring-tertiary-fixed/20 md:flex">
         <span class="led text-tertiary-fixed"></span>
-        Runs on-device
+        Local-first
       </span>
-      <a href="/#early-access" class="hidden min-h-10 items-center rounded-xl bg-primary-container px-4 font-mono text-tele-md font-bold uppercase tracking-wider text-on-primary-fixed shadow-[0_0_20px_rgb(0_242_254/0.35)] transition-shadow hover:shadow-[0_0_32px_rgb(0_242_254/0.6)] sm:inline-flex">
-        Get early access
+      <a href="/get-started/" class="hidden min-h-10 items-center rounded-xl bg-primary-container px-4 font-mono text-tele-md font-bold uppercase tracking-wider text-on-primary-fixed shadow-[0_0_20px_rgb(0_242_254/0.35)] transition-shadow hover:shadow-[0_0_32px_rgb(0_242_254/0.6)] sm:inline-flex">
+        Get started
       </a>
       <button
         type="button"
@@ -77,7 +77,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
         ))
       }
     </ul>
-    <a href="/#early-access" class="btn-primary mt-5 w-full">Get early access</a>
+    <a href="/get-started/" class="btn-primary mt-5 w-full">Get started</a>
   </nav>
 </header>
 

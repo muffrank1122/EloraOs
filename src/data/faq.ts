@@ -1,60 +1,24 @@
 export interface Faq {
   q: string;
-  /** Plain text: used both on the page and in the FAQPage structured data. */
+  /** Shared by visible copy and FAQPage structured data. */
   a: string;
 }
 
 export const FAQS: Faq[] = [
-  {
-    q: 'What is Elora?',
-    a: 'Elora is a private, local-first AI companion for Windows. She runs on your own PC, sees what is on your screen, listens when you hold to talk, remembers what matters with dated memories, and can act for you — set reminders, manage tasks, search files and automate the browser. She talks with you in English, Roman Urdu or a mix of both.',
-  },
-  {
-    q: 'Does Elora work without the cloud?',
-    a: 'Yes. Chat, speech recognition and reasoning run on local models through Ollama on your PC. The internet is only needed to download the models and for optional features you switch on yourself, such as a cloud voice or online research. Every outbound request passes through a single network guard.',
-  },
-  {
-    q: 'What hardware does Elora need?',
-    a: 'Windows 10 or 11, a graphics card with 4 GB of memory (Elora is tuned on a GTX 1650) and at least 16 GB of RAM — 32 GB is more comfortable. The chat model stays fully on the GPU while speech recognition, voice and embeddings run on the CPU.',
-  },
-  {
-    q: 'Does Elora run on macOS or Linux?',
-    a: 'Not today. Elora is built and tested for Windows 10 and 11 first, because she relies on Windows features for screen context, audio and desktop actions.',
-  },
-  {
-    q: 'Which AI models does Elora use?',
-    a: 'Local models served by Ollama. The default chat model is Llama 3.2 3B with a tuned configuration that keeps every layer on a 4 GB GPU — about 54 tokens per second on a GTX 1650. Speech recognition uses Whisper models on your PC, and voices come from Kokoro and Piper. Models are swappable: change one and Elora keeps her memory and personality.',
-  },
-  {
-    q: 'Can Elora understand Roman Urdu?',
-    a: 'Yes. She follows you between English and Roman Urdu in the same conversation, and understands phrases like "yaad dilana 5 baje", "agle juma" or "parson". Dates such as these are calculated in code, not guessed by the model. Urdu and Hindi speech recognition is supported through IndicWhisper.',
-  },
-  {
-    q: 'Is Elora always listening?',
-    a: 'No. Voice is push-to-talk: you click and hold the mic button while you speak, and only what you say while holding is transcribed. Transcription takes about a second and happens on your PC.',
-  },
-  {
-    q: 'Does Elora read my screen? What about banking and passwords?',
-    a: 'Elora periodically reads the text on your screen and which app is in front so she can help in context. That text is treated as untrusted: it can be remembered and searched but never becomes an instruction she follows. Banking, password and health pages drop to minimal observation, a privacy mode pauses perception entirely, and one key hides her instantly.',
-  },
-  {
-    q: 'Can Elora take actions on my computer?',
-    a: 'Yes. She has around 70 built-in actions — reminders, tasks, memory, files, research and browser automation — plus any tools you add through the Model Context Protocol (MCP). Everything passes through one risk policy, and anything risky waits for your visible approval.',
-  },
-  {
-    q: 'Where is my data stored, and can I delete it?',
-    a: 'On your PC. Conversations, the timeline of what she has seen and her memories live in a local SQLite database and a local vector index (ChromaDB) in Elora\'s data folder. You can inspect it, and one command wipes it completely.',
-  },
-  {
-    q: 'Does Elora remember everything forever?',
-    a: 'No, on purpose. Every fact is stored with a date so old information never reads as current, and each night Elora consolidates what she learned and runs a forgetting pass that lets go of low-value memories.',
-  },
-  {
-    q: 'How is Elora different from ChatGPT or Copilot?',
-    a: 'Cloud assistants live on someone else\'s servers and wait in a tab until you ask. Elora lives on your PC: she keeps running in the background, notices what you are doing, keeps her memory locally, and can act on your desktop — with your conversations staying on your own hardware.',
-  },
-  {
-    q: 'When can I get Elora, and how much will it cost?',
-    a: 'Elora is in active development. Leave your email on this site and we will send one message when the first public build for Windows is ready. Pricing has not been announced yet.',
-  },
+  { q: 'What is Elora?', a: 'Elora is a local-first AI companion for Windows. She combines conversation, optional screen context, local memory, reminders and tools in a desktop workspace. She follows English, Roman Urdu or a mix, with a background brain that pauses when you talk.' },
+  { q: 'Does Elora work without the cloud?', a: 'Yes. Once the required models and dependencies are installed, local chat, speech recognition, voice and background reasoning can run on your PC. Online research, Google services and the optional Groq-powered desktop agent require internet access. Cloud speech, chat and voice are separate opt-ins.' },
+  { q: 'What hardware does Elora need?', a: 'Windows 10 or 11 and at least 16 GB RAM; 32–64 GB is more comfortable for heavier workloads. Elora is tuned on a 4 GB GTX 1650, but model choice affects memory use and performance. Source setup also needs Python 3.13, Ollama and Node.js for the HUD; Tesseract enables screen OCR.' },
+  { q: 'Does Elora run on macOS or Linux?', a: 'Windows is the supported product target. Some code and tests run on Linux, but that does not mean the desktop companion, audio capture and Windows actions are supported there. This site does not offer macOS or Linux builds.' },
+  { q: 'Which AI models does Elora use?', a: 'Local language, vision and embedding models are served through Ollama. The documented lightweight chat setup uses a tuned Llama 3.2 3B model. Local speech uses Whisper-based engines and local voices include Kokoro and Piper. Optional GroqCloud engines can handle speech recognition, chat and English voice separately, with local fallback on failure.' },
+  { q: 'Can Elora understand Roman Urdu?', a: 'Yes. Elora supports English and Roman Urdu conversation, including reminder phrases such as “yaad dilana 5 baje.” Dates are calculated in code. Urdu and Hindi speech recognition is supported through IndicWhisper; voice output language support depends on the selected voice engine. The optional Groq Orpheus voice is English.' },
+  { q: 'Is Elora always listening?', a: 'The default interaction is push-to-talk: hold the HUD mic button, speak, then release. A warm microphone can keep a short in-memory audio buffer between presses. Optional hands-free mode keeps the mic open to check locally for “Elora”; meeting/system-audio capture is separate. With cloud speech enabled, captured clips are sent to Groq for transcription.' },
+  { q: 'What changes when I enable cloud features?', a: 'In hybrid mode, you can enable Groq speech recognition, chat and voice separately. Selected audio clips, chat messages and relevant context, or text to be spoken are sent to Groq. Keys and card/ID-like numbers are masked, but that is not a guarantee that every personal detail is removed. The background brain, vision, embeddings and memory storage remain local.' },
+  { q: 'Can Elora take actions on my computer?', a: 'Yes, through the optional Windows desktop agent and built-in tools. Desktop control is off by default and only runs on a task you request. It needs Windows-MCP, hybrid mode and Groq. Clicks, typing and app launches follow your request; PowerShell, closing programs, registry and raw file operations require visible approval. The autonomous brain cannot use the desktop agent.' },
+  { q: 'Can Elora connect to Google Workspace?', a: 'Yes. An optional MCP integration connects Gmail, Google Calendar and Drive using your Google account after OAuth setup. Reads can run automatically; sending, drafting, creating, updating, uploading and deleting require approval in the HUD. If cloud chat or voice is enabled, Google content used in a reply or spoken output can also be sent to Groq.' },
+  { q: 'What are Hermes hands?', a: 'An experimental, off-by-default sidecar integration for bounded research, file and code tasks. It requires a compatible model served with at least 64,000 tokens of context; the documented default 8K local model does not qualify. The optional code hand also requires Docker. It is not a standard ready-to-use feature on the baseline 4 GB setup.' },
+  { q: 'Does Elora read my screen?', a: 'When screen perception is enabled, Elora reads screen text and window context locally. Screen text is treated as untrusted input. Privacy mode pauses perception. The optional desktop agent sends redacted focused-window text to Groq, while screenshots stay on your PC. Cloud chat may also receive context included in a prompt.' },
+  { q: 'Where is my data stored, and can I delete it?', a: 'Elora stores conversations, timelines and memory locally in SQLite, Chroma and related data files. The product includes reset and maintenance tools; check their documented scope before using them because models, logs or credentials may remain. Google authorization is separate and can be revoked from your Google account. Local deletion does not delete data already sent to a cloud provider.' },
+  { q: 'Does Elora remember everything forever?', a: 'No. Facts carry dates, and nightly consolidation and forgetting help maintain memory. Retrieval and the connection between conversational and background memory are still being improved, so a stored fact is not a guarantee that every reply will recall it.' },
+  { q: 'How is Elora different from a browser assistant?', a: 'Elora centers the experience on a Windows companion with a continuous background brain, local memory, screen context and owner-directed actions. You can keep the core experience local or opt into connected features. Which approach fits depends on your hardware and the capabilities you need.' },
+  { q: 'When can I get Elora, and how much will it cost?', a: 'Elora is in active development. This website currently provides product information and a source-setup guide, not a public installer or an active email waitlist. The source project uses Apache License 2.0; public build availability and commercial pricing have not been announced here. Optional cloud providers may have their own limits or charges.' },
 ];
